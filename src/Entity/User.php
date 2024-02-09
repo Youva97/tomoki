@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         match: true,
         message: 'Le mot de passe doit contenir au moin 1 chiffre, 1 lettre minuscule, 1 lettre majuscule et doit faire au moins 8 caractères',
     )]
-
+    
     private ?string $password;
 
     #[Assert\EqualTo(
@@ -71,7 +71,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstName;
 
     #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
+    private ?string $lastName;
+
+    private $oldPassword;
+    #[Assert\NotBlank(message: 'Vous devez entrez un mot de passe')]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'Votre mot de passe doit faire un minimum de 8 caractères'
+    )]
+    private $newPassword;
+
+    /* Confirmation du password */
+    
 
     public function getId(): ?int
     {
