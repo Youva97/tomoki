@@ -67,9 +67,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 20,
         minMessage: 'Le prénom doit faire plus que {{ limit }} caractères',
         maxMessage: 'Le prénom ne peut pas faire plus que {{ limit }} caractères',
+        groups:['register']
     )]
     private ?string $firstName;
-
+    
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(
+        message: 'Vous devez renseigner votre nom',
+        groups: ['register']
+    )]
+    #[Assert\Length(    
+        min: 3,
+        max: 20,
+        minMessage: 'Le nom doit faire plus que {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas faire plus que {{ limit }} caractères',
+        groups:['register']
+    )]
     #[ORM\Column(length: 255)]
     private ?string $lastName;
 
@@ -82,7 +95,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $newPassword;
 
     /* Confirmation du password */
-    
+    #[Assert\NotBlank(message:"Vous devez entrer une confirmation de mot de passe")]
+    #[Assert\EqualTo(
+        propertyPath: 'newPassword',
+        message: 'Les deux mots de passe ne sont pas identiques'
+    )]
+    private $confirmNewPassword;
 
     public function getId(): ?int
     {
