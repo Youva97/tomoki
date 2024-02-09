@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+	<h1>Mon compte</h1>
+    {{dump(app.user.firstName)}}
+	Bienvenu {{app.user.firstName}} - Vous pourrez gérer toutes vos informations personnelles dans cet espace.
+	<br>
+	{{dump(app.user)}}
+	<br>
+	- Modifier mon mot de passe
+	<br>
+	- Ajouter mes adresses
+	<br>
+	- Mes commandes
+	<br>
+{% endblock %}
+
