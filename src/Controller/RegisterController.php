@@ -13,24 +13,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegisterController extends AbstractController
 {
-    private $passwordHasher;    
+    private $passwordHasher;
     private $manager;
 
     public function __construct(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $manager)
     {
-        $this->passwordHasher = $passwordHasher;  
+        $this->passwordHasher = $passwordHasher;
         $this->manager = $manager;
     }
-    
-    #[Route(path:'/inscription', name: 'register')]
-    public function index(Request $request): Response  
+
+    #[Route(path: '/inscription', name: 'register')]
+    public function index(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($this->passwordHasher->hashPassword(
                 $user,
                 $user->getPassword()
@@ -41,7 +41,7 @@ class RegisterController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Le compte'.$user->getEmail().'a bien été crée'
+                'Le compte ' . $user->getEmail() . ' a bien été crée'
             );
             return $this->redirectToRoute('home');
 
@@ -50,8 +50,5 @@ class RegisterController extends AbstractController
         return $this->render('register/index.html.twig', [
             "form" => $form->createView(),
         ]);
-
-
     }
-
 }

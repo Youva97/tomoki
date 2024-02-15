@@ -1,31 +1,32 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#">Carousel</a>
+		<a class="navbar-brand" href="#">Tomoki</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarCollapse">
 			<ul class="navbar-nav me-auto mb-2 mb-md-0">
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="#">Home</a>
+					<a class="nav-link active" aria-current="page" href="#">Nos produits</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Link</a>
+					<a class="nav-link active" aria-current="page" href="#">Qui sommes-nous ?</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link disabled" aria-disabled="true">Disabled</a>
+					<a class="nav-link active" aria-current="page" href="#">Contact</a>
 				</li>
+
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				{% if (app.user) %}
-				<li class="nav-item active">
-					<a href="{{path('deconnexion')}}" class="nav-link">Déconnexion</a>
-				</li>
-				<li class="nav-item active">
-					<a href="{{path('account')}}" class="nav-link">Mon compte
-						<small>({{app.user.firstName}})</small>
-					</a>
-				</li>
+					<li class="nav-item active">
+						<a href="{{path('deconnexion')}}" class="nav-link">Déconnexion</a>
+					</li>
+					<li class="nav-item active">
+						<a href="{{path('account')}}" class="nav-link">Mon compte
+							<small>({{app.user.firstName}})</small>
+						</a>
+					</li>
 				{% else %}
 					<li class="nav-item active">
 						<a href="{{path('register')}}" class="nav-link">Inscription</a>
@@ -47,4 +48,3 @@
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 {% endfor %}
-
