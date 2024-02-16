@@ -15,6 +15,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AccountPasswordController extends AbstractController
 {
+
+
     #[Route(path: '/compte/modifier-mon_mot-de-passe', name: 'account_password')]
     public function index(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $passwordHasher): Response
     {

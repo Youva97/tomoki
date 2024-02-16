@@ -49,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'Les deux mots de passe ne sont pas identiques',
     )]
 
-    public ?string $password_confirm;
+    public ?string $confirmPassword;
 
     private $oldPassword;
     #[Assert\NotBlank(message: 'Vous devez entrez un mot de passe')]
