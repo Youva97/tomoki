@@ -6,7 +6,7 @@ use App\Form\ChangePasswordType;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
