@@ -21,7 +21,7 @@ class RegisterType extends AbstractType
             ->add('email', EmailType::class, ['label' => false, 'attr' => ['placeholder' => "Votre email"]])
             // ->add('roles')
             ->add('password', PasswordType::class, ['label' => false, 'attr' => ['placeholder' => "Votre mot de passe"]])
-            ->add('passwordConfirm', PasswordType::class, ['label' => false, 'attr' => ['placeholder' => "Confirmé votre mot de passe"]])
+            ->add('confirmPassword', PasswordType::class, ['label' => false, 'attr' => ['placeholder' => "Confirmé votre mot de passe"]])
             ->add('submit', SubmitType::class, ['label' => 'S\'inscrire', 'attr' => ['class' => 'btn btn-success col-6 position-relative top-100 start-50 translate-middle']]);
     }
 

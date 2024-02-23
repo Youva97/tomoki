@@ -5,9 +5,12 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 // use App\Repository\UserRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
@@ -15,7 +18,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ArrayFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -75,7 +81,8 @@ class UserCrudController extends AbstractCrudController
         return $actions
             ->add('index', 'detail')
             ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
-                $action
+                return
+                    $action
                     ->setIcon('fas fa-trash')
                     ->displayIf(static function ($entity) {
                         return !in_array('ROLE_ADMIN', $entity->getRoles());
@@ -106,5 +113,14 @@ class UserCrudController extends AbstractCrudController
                 ArrayFilter::new('roles')
                     ->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => 'ROLE_USER'])
             );
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $response = $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto,$entityDto,$fields, $filters);
+        $response->andwhere("entity.roles LIKE'%ROLE_ADMIN%' OR entity.roles LIKE '%ROLE_USER%'")
+        ->orderBy('entity.id','DESC');
+
+        return $response;
     }
 }
