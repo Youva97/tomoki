@@ -2,11 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Mime\Message;
+use App\Repository\ProductRepository;
+use Doctrine\Inflector\Rules\Pattern;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[UniqueEntity(fields: ['name'],message:'Ce nom est déjà utilisé')]    
+#[ORM\HasLifecycleCallbacks]
 class Product
 {
     #[ORM\Id]
@@ -17,10 +25,13 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)] 
+    #[Gedmo\Slug(fields: ['name'])]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)] 
+    #[Assert\NotBlank(message: 'Veuillez engistrer une image svp')] 
+    #[Assert\Regex( pattern: '#\.(jpg|png|gif)$#', match: true, message: 'Url doit se terminer par .jpg ou .png ou .gif')]
     private ?string $illustration = null;
 
     #[ORM\Column(length: 255)]
@@ -57,13 +68,22 @@ class Product
     {
         return $this->slug;
     }
+    #[ORM\PrePersist] 
+    #[ORM\PreUpdate] 
+    public function initializeSlug() { 
+        // au moment de la création ou de la mise à jour 
+        $slugify = new Slugify(); 
+        $this->slug = $slugify->slugify($this->name); 
+        //dump($this->slug); 
+    }
 
-    public function setSlug(string $slug): static
+    
+/*     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
 
         return $this;
-    }
+    } */
 
     public function getIllustration(): ?string
     {

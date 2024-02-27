@@ -2,10 +2,9 @@
 
 namespace App\Controller\Admin;
 
-
 use App\Entity\User;
-// use App\Repository\UserRepository;
 use Doctrine\ORM\QueryBuilder;
+
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -19,13 +18,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ArrayFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserCrudController extends AbstractCrudController
+class AdminCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
@@ -52,15 +52,66 @@ class UserCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setFormOptions(['validation_groups' => ['register']])
-            ->setEntityLabelInPlural('Utilisateurs')
-            ->setPageTitle('new', 'Créer un Utilisateur')
-            ->setPageTitle('edit', function ($entity) {
-                return 'Utilisateur d\'Id: ' . $entity->getId();
+        return $crud->setFormOptions(['validation_groups' => ['register']]);
+    }
+
+
+    public function configureActions(Actions $actions): Actions
+    {
+
+        $goToStripe = Action::new('goToStripe')
+    ->linkToUrl('https://www.stripe.com/')
+    ->createAsGlobalAction()
+;
+
+        return $actions
+
+
+            ->add('index', 'detail')
+
+            ->remove('index',action::BATCH_DELETE)
+
+            ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
+                return
+                    $action->setIcon('fa fa-trash')
+                    ->displayIf(static function ($entity) {
+                        foreach ($entity->getRoles() as $role) {
+                            if ($role=='ROLE_ADMIN') return false;
+                        }
+                        return true;
+                    }) ;
+                return $action;
             })
-            ->setPageTitle('detail', function ($entity) {
-                return 'Utilisateur d\'Id: ' . $entity->getId();
-            });
+            ->update(Crud::PAGE_DETAIL, Action::DELETE, function (Action $action) {
+                return
+                    $action->setIcon('fa fa-trash')
+                    ->displayIf(static function ($entity) {
+                        foreach ($entity->getRoles() as $role) {
+                            if ($role=='ROLE_ADMIN') return false;
+                        }
+                        return true;
+                    }) ;
+                return $action;
+            })
+            ;
+
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('firstName')
+            ->add('lastName')
+            ->add(ArrayFilter::new('roles')->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => '']))
+         
+        ;
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $reponse =  $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $reponse -> andwhere("entity.roles  LIKE '%ROLE_ADMIN%'");
+        return $reponse;
     }
 
     public function configureFields(string $pageName): iterable
@@ -70,57 +121,10 @@ class UserCrudController extends AbstractCrudController
             TextField::new('firstName')->setLabel('Prénom'),
             TextField::new('lastName')->setLabel('Nom'),
             EmailField::new('email'),
-            TextField::new('password')->onlyWhenCreating()->setFormType(PasswordType::class)->setLabel('Mot de passe')->onlyWhenCreating()->setRequired(true),
+            TextField::new('password')->onlyWhenCreating()->setFormType(PasswordType::class),
             TextField::new('confirmPassword')->onlyWhenCreating()->setRequired(true)->setFormType(PasswordType::class),
             ChoiceField::new('roles')->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => 'ROLE_USER'])->allowMultipleChoices()
+
         ];
-    }
-
-    public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->add('index', 'detail')
-            ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
-                return
-                    $action
-                    ->setIcon('fas fa-trash')
-                    ->displayIf(static function ($entity) {
-                        return !in_array('ROLE_ADMIN', $entity->getRoles());
-                    });
-                return $action;
-            })
-            ->update(Crud::PAGE_DETAIL, Action::DELETE, function (Action $action) {
-                $action
-                    ->setIcon('fas fa-trash')
-                    ->displayIf(static function ($entity) {
-                        return !in_array('ROLE_ADMIN', $entity->getRoles());
-                    });
-                return $action;
-            })
-            ->update('index', Action::NEW, function (Action $action) {
-                $action->setLabel('Créer un Utilisateur');
-                return $action;
-            });
-    }
-
-    public function configureFilters(Filters $filters): Filters
-    {
-        return $filters
-            ->add('firstName')
-            ->add('lastName')
-            ->add('email')
-            ->add(
-                ArrayFilter::new('roles')
-                    ->setChoices(['Utilisateur' => 'ROLE_USER'])
-                    ->setLabel('Role')
-
-            );
-    }
-
-    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
-    {
-        $response = $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto,$entityDto,$fields, $filters);
-
-        return $response;
     }
 }
