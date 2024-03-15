@@ -1,43 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Produits - Ma Boutique
-{% endblock %}
+{% block title %}Nos Produits - Ma Boutique{% endblock %}
 
 {% block content %}
-	<h1>Nos Produits</h1>
-	<div class="row">
-		{% for product in products %}
-			<div class="col-md-4 mt-3">
-				<img src="/uploads/{{product.illustration}}" alt="{{product.name}}" class="img-fluid">
-				<div class="product-item text-center">
-					<h5 style="font-weight:bold">{{product.name}}</h5>
-					<div>{{product.subtitle}}</div>
-					<div style="font-weight:bold">{{(product.price /100) | number_format(2)}}
-						€</div>
-					<div>Catégorie:
-						{{product.category.name}}</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-3">
-					LES FILTRES
-				</div>
-				<div class="col-md-9">
-					LES PRODUITS
-				</div>
-			</div>
-
-            
-		{% endfor %}
-	</div>
-    {{ form_start(form) }}
-    {{ form_end(form)}}
-    {% if error %} 
-    <div class="alert alert-danger" role="alert">
-     <hr> 
-     <h4 class="alert-heading">{{error}}</h4>
-    <hr> 
+    <h1 class="mt-3">Nos Produits</h1>
+    <div class="row">
+        <div class="col-md-3">
+            Mes Filtres
+            {{ form_start(form) }}
+            {{ form_end(form) }}
+            <a href="{{ path('products') }}" class="btn btn-danger">Réinitialiser filtre</a>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <a href="{{ path('products', {'slug': product.slug}) }}">
+                                <img src="/uploads/{{ product.illustration }}" alt="{{ product.name }}" class="card-img-top">
+                            </a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title font-weight-bold">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.subtitle }}</p>
+                                <p style="font-weight: bold">{{ (product.price / 100) | number_format(2) }} €</p>
+                                <div>Catégorie: <p>{{ product.category.name }}</p></div>
+                                {% if error %}
+                                    <div class="alert alert-danger" role="alert">
+                                        <hr>
+                                        <h4 class="alert-heading">{{ error }}</h4>
+                                        <hr>
+                                    </div>
+                                {% endif %}
+                                <button type="button" class="btn btn-primary"><a href="" class="btn btn-primary">Ajouter au panier</a></button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-    {% endif %}
 {% endblock %}
-
