@@ -2,16 +2,17 @@
 
 {% block content %}
 	<h1>Mon compte</h1>
-    {{dump(app.user.firstName)}}
-	Bienvenu {{app.user.firstName}} - Vous pourrez gérer toutes vos informations personnelles dans cet espace.
+	{{dump(app.user.firstName)}}
+	Bienvenu
+	{{app.user.firstName}}
+	- Vous pourrez gérer toutes vos informations personnelles dans cet espace.
 	<br>
 	{{dump(app.user)}}
 	<br>
 	<a href="{{path('account_password')}}">Modifier mon mot de passe</a>
 	<br>
-	- Ajouter mes adresses
+	<a href="{{path('account_address')}}">Gérer mes adresses</a>
 	<br>
 	- Mes commandes
 	<br>
 {% endblock %}
-

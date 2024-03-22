@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mes Adresses - Ma boutique
+{% endblock %}
+{% block content %}
+	<a href="" class="btn btn-primary btn-sm float-end ">Ajouter une adresse</a>
+	<h1>Mes adresses</h1>
+	<p>Dans cet espace , vous pouvez gérer toutes vos adresses</p>
+	<a href="{{path('account')}}">Retour</a>
+	<hr>
+	{% if app.user.addresses | length == 0 %}
+		<p class="text-center">Il n'y a pas d'adresses enregistrées dans votre compte client</p>
+	{% else %}
+		Afficher des adresses
+	{% endif %}
+{% endblock %}

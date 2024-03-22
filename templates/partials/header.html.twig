@@ -16,6 +16,7 @@
 					<a class="nav-link active" aria-current="page" href="#">Contact</a>
 				</li>
 
+
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				{% if (app.user) %}
@@ -35,6 +36,13 @@
 						<a href="{{path('connexion')}}" class="nav-link">Connexion</a>
 					</li>
 				{% endif %}
+
+				<!-- Ajoutez la ligne suivante -->
+				<li class="nav-item active">
+					<a class="nav-link" href="{{path('cart')}}">
+						<i class="fas fa-cart-arrow-down"></i>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>

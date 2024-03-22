@@ -1,17 +1,28 @@
-{% extends 'base.html.twig' %} 
-{% block title %} {{product.name}} 
-- Ma Boutique 
-{% endblock %} 
-{% block content %} 
-<div class="row"> <div class="col-md-5"> 
-<img src="/uploads/{{product.illustration}}" alt="{{product.name}}" class="img-fluid"> 
-</div> <div class="col-md-7 my-auto"> 
-<h3>{{product.name}}</h3> 
-<p>{{product.subtitle}}</p> 
-<b>{{(product.price /100) | number_format(2)}} €</b> 
-<hr> 
-<p>{{product.description | striptags('<br><strong>') | raw}}</p> 
-<a href="" class="btn btn-primary">Ajouter au panier</a>
-<a href="{{ path('product', {'slug': product.slug}) }}"></a> 
-</div> </div> 
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{product.name}}
+	- Ma Boutique
 {% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-5">
+			<img src="/uploads/{{product.illustration}}" alt="{{product.name}}" class="img-fluid">
+		</div>
+		<div class="col-md-7 my-auto">
+			<h3>{{product.name}}</h3>
+			<p>{{product.subtitle}}</p>
+			<b>{{(product.price /100) | number_format(2)}}
+				€</b>
+			<hr>
+			<p>{{product.description | striptags('<br><strong>') | raw}}</p>
+			<a href="{{path('add_to_cart',{'id':product.id})}}" class="btn btn-primary">Ajouter au panier</a>
+			<a href="{{path('decrease_to_cart',{'id':product.product.id})}}" class="btn btn-primary">
+				<i class="fas fa-minus-square"></i>
+			</a>
+			{{product.quantity}}
+			<a href="{{path('add_to_cart',{'id':product.product.id})}}" class="btn btn-primary">
+				<i class="fas fa-plus-square"></i>
+			</a>
+			<a href="{{ path('product', {'slug': product.slug}) }}"></div>
+		</div>
+	{% endblock %}
