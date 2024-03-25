@@ -82,26 +82,15 @@
 			{% endif %}
 
 
-			<!-- Marketing messaging and featurettes
-																																																																																																																																								  ================================================== -->
-			<!-- Wrap the rest of the page in another container to center all the content. -->
+		</main>
+		<footer class="container-fluid">
+			{% include "partials/footer.html.twig" %}
+		</footer>
 
-			<div class="container marketing"> {% block content %}{% endblock %}
+		<script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
+		<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
 
-				</div>
-				<!-- /.container -->
-
-
-				<!-- FOOTER -->
-				<footer class="container-fluid">
-					{% include "partials/footer.html.twig" %}
-				</footer>
-			</main>
-
-			<script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
-			<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
-
-			{% block javascript %}
-			{%endblock%}
-		</body>
-	</html>
+		{% block javascript %}
+		{%endblock%}
+	</body>
+</html>
