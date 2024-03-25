@@ -2,17 +2,17 @@
 
 {% block content %}
 	<h1>Mon compte</h1>
-	{{dump(app.user.firstName)}}
 	Bienvenu
 	{{app.user.firstName}}
 	- Vous pourrez gérer toutes vos informations personnelles dans cet espace.
 	<br>
-	{{dump(app.user)}}
 	<br>
-	<a href="{{path('account_password')}}">Modifier mon mot de passe</a>
-	<br>
-	<a href="{{path('account_address')}}">Gérer mes adresses</a>
-	<br>
-	- Mes commandes
-	<br>
+	<div class="d-flex justify-content-between">
+		<a href="{{path('account_password')}}" class="p-2 m-3 btn btn-info col-3">Modifier mon mot de passe</a>
+		<br>
+		<a href="{{path('account_address')}}" class="p-2 m-3 btn btn-success col-3">Gérer mes adresses</a>
+		<br>
+		<a href="" class="p-2 m-3 btn btn-success col-3">Mes commandes</a>
+		<br>
+	</div>
 {% endblock %}

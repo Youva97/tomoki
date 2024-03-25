@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Produits - Ma Boutique
+{% block title %}Nos Produits - Tomoki
 {% endblock %}
 
 {% block content %}
@@ -36,7 +36,9 @@
 									</div>
 								{% endif %}
 								<button type="button" class="btn btn-primary">
-									<a href="{{ path('cart')}}" class="btn btn-primary">Voir mon panier</a>
+
+									<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+
 								</button>
 							</div>
 						</div>

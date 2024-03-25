@@ -1,15 +1,42 @@
 {% extends 'base.html.twig' %}
-{% block title %}Mes Adresses - Ma boutique
+{% block title %}Mes Adresses - Tomoki
 {% endblock %}
 {% block content %}
-	<a href="" class="btn btn-primary btn-sm float-end ">Ajouter une adresse</a>
+	<a href="{{path('account_address_add')}}" class="p-2 m-3 btn btn-primary btn-md float-end ">Gérer mes adresses</a>
+
 	<h1>Mes adresses</h1>
 	<p>Dans cet espace , vous pouvez gérer toutes vos adresses</p>
-	<a href="{{path('account')}}">Retour</a>
+
+	<div
+		class="d-flex justify-content-between">
+		{# <a href="{{path('account_address_add')}}" class="p-2 m-3 btn btn-primary btn-md col-6">Ajouter une adresse</a> #}
+		<br>
+		<a href="{{path('account')}}" class="p-2 m-3 btn btn-info btn-md col-6">Retour</a>
+		<br>
+	</div>
 	<hr>
 	{% if app.user.addresses | length == 0 %}
 		<p class="text-center">Il n'y a pas d'adresses enregistrées dans votre compte client</p>
 	{% else %}
-		Afficher des adresses
+		<div class="row">
+			{% for address in app.user.addresses %}
+				<div class="col-md-4">
+					<div class="card" style="width: 18rem;">
+						<div class="card-body">
+							<h5 class="card-title">{{address.name}}</h5>
+							<p class="card-text">
+								{{address.address}}
+								<br>
+								{{address.postal}}
+								-
+								{{address.city}}
+							</p>
+							<a href="{{path('account_address_edit',{'id':address.id})}}" class="card-link btn btn-info">Modifier</a>
+							<a href="{{path('account_address_delete',{'id':address.id})}}" class="card-link btn btn-danger" onclick="return confirm('Etes- vous sur de vouloir supprimer l\'adresse {{address.name}} ?')">Supprimer</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 	{% endif %}
 {% endblock %}

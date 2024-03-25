@@ -41,12 +41,12 @@ class RegisterController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Le compte ' . $user->getEmail() . ' a bien été crée'
+                'Le compte ' . $user->getEmail() . ' a bien été créé'
             );
-            return $this->redirectToRoute('home');
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('connexion'); // Redirection vers la page de connexion
         }
+
         return $this->render('register/index.html.twig', [
             "form" => $form->createView(),
         ]);

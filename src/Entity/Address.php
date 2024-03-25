@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -32,8 +33,13 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $postal = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Regex(
+        pattern: '#^[0-9]{5}#',
+        match: true,
+        message: 'le code postal doit être au format 00000'
+    )]
+    private $postal;
 
     #[ORM\Column(length: 255)]
     private ?string $city = null;
@@ -41,8 +47,13 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $country = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $phone = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Regex(
+        pattern: '#^0[1-9]([-][0-9]{2}){4}#',
+        match: true,
+        message: 'le téléphone doit être au format 00-00-00-00-00'
+    )]
+    private $phone;
 
     public function getId(): ?int
     {
