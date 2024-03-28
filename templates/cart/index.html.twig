@@ -68,7 +68,7 @@
 						</td>
 						<td>
 							{% if product.product is not null and product.product.id is not null %}
-								<a href="{{ path('delete_to_cart', {'id': product.product.id}) }}" class="btn btn-danger">
+								<a href="{{ path('delete_to_product', {'id': product.product.id}) }}" class="btn btn-danger">
 									<i class="fas fa-trash-alt"></i>
 								</a>
 							{% else %}
@@ -80,13 +80,18 @@
 			</tbody>
 		</tr>
 	{% endfor %}
-</tbody></table><div class="text-end">
-<b>Nombre de produits:
-	{{ cart | length }}</b>
+</tbody>
+</table>
+<div class="text-end p-2 m-2">
+<b>Nombre de produits:{{ cart | length }}</b>
 <b><br>Total de mon panier:
 	{{ (total / 100) | number_format(2) }}€</b>
 <div class="d-flex justify-content-between">
 	<a href="{{ path('remove_my_cart') }}" class="btn btn-danger col-6">Annuler mon panier</a>
-	<a href="" class="btn btn-success col-6">Valider mon panier</a>
-</div></div>{% else %}<p>
-<b>Votre panier est vide</b></p>{% endif %}{% endblock %}
+	<a href="{{path('order')}}" class="btn btn-success col-6">Valider mon panier</a>
+</div>
+</div>
+{% else %}
+<p><b>Votre panier est vide</b></p>
+{% endif %}
+{% endblock %}

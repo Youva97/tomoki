@@ -25,6 +25,7 @@
 		</header>
 
 		<main>
+		{% block content %}{% endblock %}
 			{% if block('carrousel') is defined %}
 				<div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
 					<div class="carousel-indicators">
@@ -80,7 +81,7 @@
 					</button>
 				</div>
 			{% endif %}
-
+			
 
 		</main>
 		<footer class="container-fluid">
