@@ -87,17 +87,24 @@ class AccountAddressController extends AbstractController
     }
 
     #[Route(path: '/compte/supprimer-une-adresse/{id}', name: 'account_address_delete')]
-    public function delete(Request $request, EntityManagerInterface $manager, Address $address): Response
+    public function delete(EntityManagerInterface $manager, Address $address): Response
     {
         // on vérifie qu'une adresse existe ou qu'elle appartient à l'utilisateur connecté 
-        if ($address && $address->getUser() == $this->getUser()) {
+        if ($address->getUser() == $this->getUser()) {
             $manager->remove($address);
             $manager->flush(); // envoyer l'info à la bdd 
             $this->addFlash(
                 'success',
                 "L'adresse {$address->getName()} a bien été supprimée"
             );
-        } // on retourne vers l'accueil 
+            return $this->redirectToRoute('account_address');
+        } else {
+            $this->addFlash(
+                'Violation',
+                "Vous essayé de supprimé une adresse qui ne vous appartient pas ! espèce d'enfoiré"
+            );
+        }
         return $this->redirectToRoute('account_address');
+        
     }
 }

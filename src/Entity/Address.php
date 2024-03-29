@@ -21,18 +21,22 @@ class Address
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez entrez une Nom')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez entrez une Prénom')]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez entrez une Nom')]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $company = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez entrez une adresse')]
     private ?string $address = null;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -47,6 +51,7 @@ class Address
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez choisir un Pays')]
     private ?string $country = null;
 
     #[ORM\Column(type: 'string', length: 255)]

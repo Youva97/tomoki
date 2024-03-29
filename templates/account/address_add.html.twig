@@ -2,44 +2,47 @@
 {% block title %}Ajouter une adresse - Tomoki
 {% endblock %}
 {% block content %}
-	<h1>Gérer mes adresses</h1>
-	<a href="{{path('account')}}">Retour</a>
-	<hr>
+	<div class="container-fluid">
+		<h1 class="text-center p-2 m-3">Gérer mes adresses</h1>
+		<a href="{{path('account')}}" class="btn btn-info col-2">Retour</a>
+		<hr>
 
-	{{form_start(form)}}
-	<div class="row">
-		<div class="col-md12">
-			{{form_row(form.name)}}
+		{{form_start(form)}}
+		<div class="row p-2 m-3">
+			<div class="col-12">
+				{{form_row(form.name)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.firstName)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.lastName)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.company)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.address)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.postal)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.city)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.country)}}
+			</div>
+			<div class="col-md-6">
+				{{form_row(form.phone)}}
+			</div>
 		</div>
-		<div class="col-md-6">
-			{{form_row(form.firstName)}}
+		<div class="row p-2 m-3">
+			<div class="text-center">
+				{{form_row(form.submit)}}
+			</div>
 		</div>
-		<div class="col-md-6">
-			{{form_row(form.lastName)}}
-		</div>
-		<div class="col-md-6">
-			{{form_row(form.company)}}
-		</div>
-		<div class="col-md-6">
-			{{form_row(form.address)}}
-		</div>
-		<div class="col-md-6">
-			{{form_row(form.postal)}}
-		</div>
-		<div class="col-md-6">
-			{{form_row(form.city)}}
-		</div>
-		<div class="col-md-6">
-			{{form_row(form.country)}}
-		</div>
-		<div class="col-md-6">
-			{{form_row(form.phone)}}
-		</div>
+		{{form_end(form)}}
 	</div>
-	<div class="row">
-		<div class="col-md-12">
-			{{form_row(form.submit)}}
-		</div>
-	</div>
-	{{form_end(form)}}
 {% endblock %}
+

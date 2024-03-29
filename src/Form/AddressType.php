@@ -19,6 +19,7 @@ class AddressType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Quel nom souhaitez-vous donner à votre adresse',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "Nommez votre adresse"
                 ]
@@ -26,6 +27,7 @@ class AddressType extends AbstractType
 
             ->add('firstName', TextType::class, [
                 'label' => 'Votre prénom',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "Entrer votre prénom"
                 ]
@@ -33,6 +35,7 @@ class AddressType extends AbstractType
 
             ->add('lastName', TextType::class, [
                 'label' => 'Votre nom',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "Entrer votre nom"
                 ]
@@ -48,6 +51,7 @@ class AddressType extends AbstractType
 
             ->add('address', TextType::class, [
                 'label' => 'Votre adresse',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "8 rue des lilas ..."
                 ]
@@ -55,6 +59,7 @@ class AddressType extends AbstractType
 
             ->add('postal', TextType::class, [
                 'label' => 'Votre code postal',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "Entrer votre code postal"
                 ]
@@ -62,18 +67,21 @@ class AddressType extends AbstractType
 
             ->add('city', TextType::class, [
                 'label' => 'Votre ville',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "Entrer votre ville"
                 ]
             ])
             ->add('country', CountryType::class, [
                 'label' => 'Pays',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "Entrer votre pays"
                 ]
             ])
             ->add('phone', TelType::class, [
                 'label' => 'Votre Téléphone',
+                'required' => false,
                 'attr' => [
                     'placeHolder' => "Entrez votre téléphone"
                 ]
@@ -83,7 +91,7 @@ class AddressType extends AbstractType
             'choice_label' => 'id',
             ])*/
             ->add('submit', SubmitType::class, [
-                'label' => 'Valider',
+                'label' => 'Sauvegarder Votre Addresse',
                 'attr' => [
                     'class' => "btn btn-success col-6"
                 ]
