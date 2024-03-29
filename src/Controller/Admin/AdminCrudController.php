@@ -60,26 +60,25 @@ class AdminCrudController extends AbstractCrudController
     {
 
         $goToStripe = Action::new('goToStripe')
-    ->linkToUrl('https://www.stripe.com/')
-    ->createAsGlobalAction()
-;
+            ->linkToUrl('https://www.stripe.com/')
+            ->createAsGlobalAction();
 
         return $actions
 
 
             ->add('index', 'detail')
 
-            ->remove('index',action::BATCH_DELETE)
+            ->remove('index', action::BATCH_DELETE)
 
             ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
                 return
                     $action->setIcon('fa fa-trash')
                     ->displayIf(static function ($entity) {
                         foreach ($entity->getRoles() as $role) {
-                            if ($role=='ROLE_ADMIN') return false;
+                            if ($role == 'ROLE_ADMIN') return false;
                         }
                         return true;
-                    }) ;
+                    });
                 return $action;
             })
             ->update(Crud::PAGE_DETAIL, Action::DELETE, function (Action $action) {
@@ -87,14 +86,12 @@ class AdminCrudController extends AbstractCrudController
                     $action->setIcon('fa fa-trash')
                     ->displayIf(static function ($entity) {
                         foreach ($entity->getRoles() as $role) {
-                            if ($role=='ROLE_ADMIN') return false;
+                            if ($role == 'ROLE_ADMIN') return false;
                         }
                         return true;
-                    }) ;
+                    });
                 return $action;
-            })
-            ;
-
+            });
     }
 
     public function configureFilters(Filters $filters): Filters
@@ -102,15 +99,13 @@ class AdminCrudController extends AbstractCrudController
         return $filters
             ->add('firstName')
             ->add('lastName')
-            ->add(ArrayFilter::new('roles')->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => '']))
-         
-        ;
+            ->add(ArrayFilter::new('roles')->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => '']));
     }
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $reponse =  $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $reponse -> andwhere("entity.roles  LIKE '%ROLE_ADMIN%'");
+        $reponse->andwhere("entity.roles  LIKE '%ROLE_ADMIN%'");
         return $reponse;
     }
 
@@ -124,7 +119,6 @@ class AdminCrudController extends AbstractCrudController
             TextField::new('password')->onlyWhenCreating()->setFormType(PasswordType::class),
             TextField::new('confirmPassword')->onlyWhenCreating()->setRequired(true)->setFormType(PasswordType::class),
             ChoiceField::new('roles')->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => 'ROLE_USER'])->allowMultipleChoices()
-
         ];
     }
 }

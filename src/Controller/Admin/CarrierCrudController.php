@@ -20,9 +20,9 @@ class CarrierCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('Nom du transporteur'),
-            TextEditorField::new('description'),
-            MoneyField::new('price')->setCurrency('EUR'),
+            TextField::new('name', 'Nom du transporteur'),
+            TextEditorField::new('description', 'Service du transporteur'),
+            MoneyField::new('price', 'prix')->setCurrency('EUR'),
         ];
     }
 }

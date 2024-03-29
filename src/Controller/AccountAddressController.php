@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Services\Cart;
 use App\Entity\Address;
 use App\Form\AddressType;
-use App\Services\Cart;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AccountAddressController extends AbstractController
@@ -31,20 +33,21 @@ class AccountAddressController extends AbstractController
     }
 
     #[Route(path: '/compte/ajouter-une-adresse', name: 'account_address_add')]
-    public function add(Request $request, Cart $cart): Response
+    public function add(#[CurrentUser] ?User $user, Request $request, Cart $cart): Response
     {
+
+        // si il y a des produits dans le panier , on va vers order (/commande)         
+        if ($cart->get() && $user->getAddresses()->getValues()) {
+            return $this->redirectToRoute('order');
+        } // sinon on va vers la gestion des adresses 
+        else {
+            $this->redirectToRoute('account_address');
+        }
+
         $address = new Address();
         $form = $this->createForm(AddressType::class, $address);
 
         $form->handleRequest($request);
-
-        // si il y a des produits dans le panier , on va vers order (/commande) 
-        if ($cart->get()) { 
-            return $this->redirectToRoute('order'); 
-        } // sinon on va vers la gestion des adresses 
-        else { // on retourne vers l'accueil return 
-            $this->redirectToRoute('account_address'); 
-        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $address->setUser($this->getUser());

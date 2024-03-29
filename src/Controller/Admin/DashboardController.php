@@ -2,18 +2,24 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Carrier;
 use App\Entity\User;
-use App\Entity\Category;
+use App\Entity\Order;
+use App\Entity\Carrier;
 use App\Entity\Product;
+use App\Entity\Category;
+use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
+
+    private $order;
+
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
@@ -33,7 +39,12 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        return $this->render('admin/dashBoard.html.twig');
+        // redirect to some CRUD controller 
+        $routeBuilder = $this->container->get(AdminUrlGenerator::class);
+        return $this
+            ->redirect($routeBuilder
+                ->setController(OrderCrudController::class)
+                ->generateUrl()); // return $this->render('admin/dashBoard.html.twig', []);
     }
 
     public function configureDashboard(): Dashboard
@@ -52,5 +63,19 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Commandes');
         yield MenuItem::linkToCrud('Catégorie', 'fas fa-folder', Category::class);
         yield MenuItem::linkToCrud('Produits', 'fas fa-tags', Product::class)->setController(ProductCrudController::class);
+        $nbrsOrderWait = count($this->order->findBy(['statut' => 0]));
+        $nbrsOrderOk = count($this->order->findBy(['statut' => 1]));
+        yield MenuItem::linkToCrud(
+            'Commandes <span style="color:green;font-weight:bold" class="badge badge-success">' . $nbrsOrderOk .
+                '</span> <span style="color:red;font-weight:bold" class="badge badge-danger">' . $nbrsOrderWait .
+                '</span>',
+            'fas fa-shopping-cart',
+            Order::class
+        );
+    }
+
+    public function __construct(OrderRepository $order)
+    {
+        $this->order = $order;
     }
 }
