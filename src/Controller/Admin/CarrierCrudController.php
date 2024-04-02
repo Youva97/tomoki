@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Carrier;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -21,7 +22,8 @@ class CarrierCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name', 'Nom du transporteur'),
-            TextEditorField::new('description', 'Service du transporteur'),
+            Field::new('description', 'Service du transporteur')->hideOnIndex(),
+            TextEditorField::new('description')->setLabel('Service du transporteur')->hideOnForm(),
             MoneyField::new('price', 'prix')->setCurrency('EUR'),
         ];
     }

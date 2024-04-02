@@ -104,7 +104,8 @@ class Carrier
         return $this;
     }
 
-    public function __toString() { 
-        return $this->name . '[br]' . $this->description . '[br]' . number_format($this->price / 100, 2) . ' €';
+    public function __toString()
+    {
+        return $this->name . '[br]' . $this->description . ' [br]' . number_format($this->price / 100, 2) . ' €';
     }
 }
