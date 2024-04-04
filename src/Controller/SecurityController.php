@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -25,8 +26,12 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/deconnexion', name: 'deconnexion')]
-    public function logout(): void
+    public function logout(SessionInterface $session) : Response
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        $session->remove('cart');
+        $session->invalidate();
+
+    // Rediriger l'utilisateur vers la page de déconnexion
+    return $this->redirectToRoute('connexion');
     }
 }

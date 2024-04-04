@@ -22,7 +22,7 @@ class OrderController extends AbstractController
     {
 
         $form = $this->createForm(OrderType::class, null, [
-            'user' => $user
+            'user' => $this->getUser()
         ]);
         $form->handleRequest($request);
 
@@ -60,6 +60,9 @@ class OrderController extends AbstractController
                 $orderDetails->setPrice($product['product']->getPrice()); //dump($product); 
                 $manager->persist($orderDetails);
             }
+            
+            $manager->flush();
+            
             return $this->render('order/recap.html.twig', [
                 'cart' => $cartComplete,
                 'order' => $order,

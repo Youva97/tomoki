@@ -6,6 +6,7 @@ use App\Services\Cart;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
@@ -49,7 +50,7 @@ class CartController extends AbstractController
         return $this->redirectToRoute('cart');
     }
 
-    #[Route(path: '/cart/decrease/{id}', name: 'decrease_to_cart')] 
+    #[Route(path: '/cart/decrease/{id}', name: 'decrease_to_cart')]
     public function decrease(Cart $cart, $id): Response
     {
         $cart->decrease($id);

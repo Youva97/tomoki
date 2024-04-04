@@ -79,4 +79,11 @@ class OrderDetails
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return 'OrderDetails ' . $this->getId();
+    }
+
+
 }

@@ -14,8 +14,8 @@
 			<b>{{(product.price /100) | number_format(2)}}
 				€</b>
 			<hr>
-			<p>{{product.description | striptags('<br><strong>') | raw}}</p>
+			<p>{{product.description | striptags('<br><p><strong><b><img>') | raw}}</p>
 			<a href="{{path('add_to_cart',{'id':product.id})}}" class="btn btn-primary">Ajouter au panier <i class="fas fa-cart-plus"></i></a>
-			<a href="{{ path('product', {'slug': product.slug}) }}"></div>
+			<a href="{{ path('product', {'slug': product.slug}) }}">Produits</div>
 		</div>
 	{% endblock %}

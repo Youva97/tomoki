@@ -20,7 +20,8 @@ class HomeController extends AbstractController
         // dump($panier); 
         $panier[7] = 6; 
         $requestStack->getSession()->set('cart', $panier); 
-        // dump($panier); $requestStack->getSession()->remove('cart'); 
+        // dump($panier); 
+        $requestStack->getSession()->remove('cart'); 
         // dump($requestStack->getSession()->get('cart')); 
         return $this->render('home/index.html.twig'); 
     }
