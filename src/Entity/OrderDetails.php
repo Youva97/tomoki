@@ -82,7 +82,10 @@ class OrderDetails
 
     public function __toString()
     {
-        return 'OrderDetails ' . $this->getId();
+        $order = $this->getMyOrder();
+        
+        // Si la commande ou les produits ne sont pas disponibles, utilisez simplement l'ID de la commande
+        return 'Détail de la commande ' . $this->getId();
     }
 
 

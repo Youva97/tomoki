@@ -23,14 +23,19 @@
 					<div class="col-2">
 						<img src="/uploads/{{product.product.illustration}}" alt="{{product.product.name}}" class="img-fluid">
 					</div>
-					<div class="col-4">
-						{{product.product.name}}<br>
-						<i>{{product.product.subtitle}}</i>
+					<div class="col-2">
+						<strong>{{product.product.name}}</strong><br>
+						<i>{{product.product.subtitle}}</i><br>
 					</div>
-					<div class="col-2 my-auto">{{product.quantity}}</div>
+					<div class="col-2">
+						<b>{{(product.product.price / 100) | number_format(2)}}</b><br>
+					</div>
+					<div class="col-2">
+						<i>{{product.quantity}}</i>
+					</div>
 				</div>
 			{% endfor %}
-			<b>bouton pour payer</b>
 		</div>
 	</div>
 {% endblock %}
+

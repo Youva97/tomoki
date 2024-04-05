@@ -21,11 +21,13 @@ class OrderController extends AbstractController
     public function index(#[CurrentUser] ?User $user, Request $request, EntityManagerInterface $manager, Cart $cart, ProductRepository $repo): Response
     {
 
-        $form = $this->createForm(OrderType::class, null, [
-            'user' => $this->getUser()
-        ]);
-        $form->handleRequest($request);
 
+        
+        if (!$user->getAddresses()->getValues()) {
+            return $this->redirectToRoute('account_address_add');
+        }
+        
+        
         $cart = $cart->get();
         $cartComplete = [];
         foreach ($cart as $id => $quantity) {
@@ -34,10 +36,12 @@ class OrderController extends AbstractController
                 'quantity' => $quantity,
             ];
         }
-
-        if (!$user->getAddresses()->getValues()) {
-            return $this->redirectToRoute('account_address_add');
-        }
+        
+        $form = $this->createForm(OrderType::class, null, [
+            'user' => $this->getUser()
+        ]);
+        $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
 
