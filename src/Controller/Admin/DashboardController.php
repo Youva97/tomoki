@@ -61,8 +61,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Utilisateurs');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-users', User::class);
         yield MenuItem::linkToCrud('Administrateur', 'fas fa-users', User::class)->setController(AdminCrudController::class);
-        yield MenuItem::linkToCrud('Transporteurs', 'fas fa-truck', Carrier::class);
         yield MenuItem::section('Commandes');
+        yield MenuItem::linkToCrud('Transporteurs', 'fas fa-truck', Carrier::class);
         yield MenuItem::linkToCrud('Catégorie', 'fas fa-folder', Category::class);
         yield MenuItem::linkToCrud('Produits', 'fas fa-tags', Product::class)->setController(ProductCrudController::class);
         $nbrsOrderWait = count($this->order->findBy(['statut' => 0]));
