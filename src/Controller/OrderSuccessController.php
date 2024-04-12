@@ -15,7 +15,6 @@ class OrderSuccessController extends AbstractController
     #[Route(path: '/commande/merci/{stripeSessionId}', name: 'order_success')]
     public function index(Order $order, EntityManagerInterface $manager, Cart $cart, $stripeSessionId): Response
     {
-        $order = $manager->getRepository(Order::class)->findOneBy(['stripeSessionId' => $stripeSessionId]);
 
         if (!$order || $order->getUser() != $this->getUser()) return $this->redirectToRoute('home');
 
