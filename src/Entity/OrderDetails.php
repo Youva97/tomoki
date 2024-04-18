@@ -80,8 +80,5 @@ class OrderDetails
         return $this;
     }
 
-    public function __toString()
-    {
-        return 'Produit :' . $this->getProduct()->getName();
-    }
+    public function __toString() { return $this->product->getName() . ' x ' . $this->quantity; }
 }

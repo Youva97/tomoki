@@ -7,7 +7,7 @@ use App\Services\Cart;
 use Stripe\StripeClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class OrderSuccessController extends AbstractController
@@ -17,7 +17,7 @@ class OrderSuccessController extends AbstractController
     {
 
         if (!$order || $order->getUser() != $this->getUser()) return $this->redirectToRoute('home');
-
+        dd($order);
         // on recupère la session pour vérifier que le paiement est bien effectuer 
         $stripe = new StripeClient($this->getParameter('STRIPE_KEY'));
         $session = $stripe->checkout->sessions->retrieve($stripeSessionId);
@@ -32,6 +32,6 @@ class OrderSuccessController extends AbstractController
             $order->setStatut(1);
             $manager->flush();
         } // envoyer un email 
-        return $this->render('order_success/index.html.twig', ['order' => $order]);
+        return $this->render('order_success/index.html.twig', ['total' => $session->amount_total]);
     }
 }

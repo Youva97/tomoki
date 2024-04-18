@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
+
 use Stripe\Stripe;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Services\Cart;
 use App\Form\OrderType;
 use App\Entity\OrderDetails;
+
+use Stripe\Checkout\Session;
 use App\Repository\ProductRepository;
+use App\Services\stripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -57,7 +61,7 @@ class OrderController extends AbstractController
             $order->setReference($date . '-' . uniqid());
             $manager->persist($order); // Enregistrer mes produit OrderDetails 
             //dump($cartComplete); 
-            $product_for_stripe = [];
+/*             $product_for_stripe = []; */
             foreach ($cartComplete as $product) {
                 $orderDetails = new OrderDetails();
                 $orderDetails->setMyOrder($order);
@@ -65,7 +69,7 @@ class OrderController extends AbstractController
                 $orderDetails->setQuantity($product['quantity']);
                 $orderDetails->setPrice($product['product']->getPrice()); //dump($product); 
 
-                $product_for_stripe[] = [
+/*                 $product_for_stripe[] = [
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => [
@@ -77,11 +81,11 @@ class OrderController extends AbstractController
                         'unit_amount' => $product['product']->getPrice(), // Prix en centimes (converti en centimes)
                     ],
                     'quantity' => $product['quantity'],
-                ];
+                ]; */
                 $manager->persist($orderDetails);
             }
 
-            $product_for_stripe[] = [
+/*             $product_for_stripe[] = [
                 'price_data' => [
                     'currency' => 'eur',
                     'product_data' => [
@@ -94,7 +98,7 @@ class OrderController extends AbstractController
             $stripeSecretKey = $this->getParameter('STRIPE_KEY');
             Stripe::setApiKey($stripeSecretKey);
             $YOUR_DOMAIN = 'http://localhost:8000';
-            $checkout_session = \Stripe\Checkout\Session::create([
+            $checkout_session = Session::create([
                 'line_items' => $product_for_stripe,
                 'customer_email' => $this->getUser()->getEmail(),
                 'mode' => 'payment',
@@ -102,16 +106,14 @@ class OrderController extends AbstractController
                 'cancel_url' => $YOUR_DOMAIN . '/commande/dommage/{CHECKOUT_SESSION_ID}'
             ]);
             $order->setStripeSessionId($checkout_session->id);
-            dump($checkout_session->url);
-            dd($checkout_session);
-
+            dump($checkout_session->url); */
 
             $manager->flush();
 
             return $this->render('order/recap.html.twig', [
                 'cart' => $cartComplete,
                 'order' => $order,
-                'stripe_checkout_session' => $checkout_session,
+                'stripe_checkout_session' => $checkout_session->url,
             ]);
         }
         return $this->render('order/index.html.twig', [
@@ -119,4 +121,5 @@ class OrderController extends AbstractController
             'cart' => $cartComplete,
         ]);
     }
+
 }
