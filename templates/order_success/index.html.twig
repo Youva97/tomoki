@@ -1,21 +1,25 @@
 {% extends 'base.html.twig' %}
-{% block title %}Ma commande - My boutique
-{% endblock %}
+
+{% block title %}Ma commande - Tomoki {% endblock %}
+
 {% block content %}
-	<h2>Confirmation de commande</h2>
-	<p>Bonjour
-		{{order.user.firstName}}
-		{{order.user.lastName}}<br><br>
-		Nous vous remercions pour votre commande n°:
-		{{order.reference}}<br><br>
-		Une Confirmation vient d'être envoyé à l'adresse email:
-		{{order.user.email}}<br>
-		Votre commande sera livrée par SYMFONY 6.2.DOCX 106 /169 DEVOLDER Eric
-		{{order.carrier.name}}
-		à l'adresse suivante:<br>
-		{{order.delivery | replace({'[br]': '<br>'}) | raw}}
-	</p>
-	<hr>
-	Pour suivre votre commande rendez-vous dans votre
-	<a href="{{path('account')}}">Compte</a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <h2 class="card-title">Confirmation de commande</h2>
+                    <p class="card-text">Merci M/Mme {{ order.user.firstName }} {{ order.user.lastName }}</p>
+                    <p class="card-text">Nous vous remercions pour votre commande n°: {{ order.reference }}</p>
+                    <p class="card-text">Une confirmation vient d'être envoyé à l'adresse email: {{ order.user.email }}</p>
+                    <p class="card-text">Votre commande sera livrée par {{ order.carrier.name }} à l'adresse suivante:</p>
+                    <p class="card-text">{{ order.delivery | replace({'[br]': '<br>'}) | raw }}</p>
+                    <hr>
+                    <p class="card-text">Pour suivre votre commande rendez-vous dans votre <a href="{{ path('account') }}">Compte</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
+

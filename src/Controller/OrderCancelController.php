@@ -10,8 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class OrderCancelController extends AbstractController
 {
-    #[Route(path: '/commande/erreur/{stripeSessionId}', name: 'order_cancel')]
-    public function index(Order $order, EntityManagerInterface $manager): Response
+    #[Route(path: '/commande/dommage/{stripeSessionId}', name: 'order_cancel')]
+    public function index(Order $order): Response
     {
         if (!$order || $order->getUser() != $this->getUser()) return $this->redirectToRoute('home'); // envoyer un email pour indinquer l'erreur 
         return $this->render('order_cancel/index.html.twig', ['order' => $order]);
