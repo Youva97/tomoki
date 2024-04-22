@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 class RegisterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
+    // faire le style de bootstrap pour le formulaire d'inscription de l'utilisateur
     {
         $builder
             ->add('firstName', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Votre prénom', 'title' => 'Prénom avec un minimum de 3 caractères et au maximum 20 caractères']])
