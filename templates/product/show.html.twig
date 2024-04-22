@@ -1,21 +1,46 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}
-	{{product.name}}
-	- Tomoki
+	{{ product.name }}
+	- TOMOKI
 {% endblock %}
+
 {% block content %}
 	<div class="row">
 		<div class="col-md-5 mb-4 text-center p-2">
-			<img src="/uploads/{{product.illustration}}" alt="{{product.name}}" class="img-fluid">
+			<img src="/uploads/{{ product.illustration }}" alt="{{ product.name }}" class="img-fluid">
 		</div>
 		<div class="col-md-7 mb-4 my-auto p-2">
-			<h3>{{product.name}}</h3>
-			<p>{{product.subtitle}}</p>
-			<b>{{(product.price /100) | number_format(2)}}
-				€</b>
+			<h3>{{ product.name }}</h3>
+			<p>{{ product.subtitle }}</p>
+			<b>{{ (product.price / 100) | number_format(2) }}€</b>
 			<hr>
-			<p>{{product.description | striptags('<br><p><strong><b><img>') | raw}}</p>
-			<a href="{{path('add_to_cart',{'id':product.id})}}" class="btn btn-primary">Ajouter au panier <i class="fas fa-cart-plus"></i></a>
-			<a href="{{ path('product', {'slug': product.slug}) }}">Produits</div>
+			<p>{{ product.description | striptags('<br><p><strong><b><img>') | raw }}</p>
+			<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier
+				<i class="fas fa-cart-plus"></i>
+			</a>
+			<a href="{{ path('products') }}" class="btn btn-secondary">Retour aux produits</a>
 		</div>
-	{% endblock %}
+	</div>
+	{% if product.comments| lenght > 0 %}
+		<div class="row">
+			<div class="col-md-5 mb-4 text-center p-2">
+				<h4>Commentaires des utilisateurs</h4>
+			</div>
+			{% for comment in product.comments %}
+				<div class="row alert-light mb-3">
+					<div class="col-md-7 mb-4 my-auto p-2">
+						<strong>{{comment.user.firstName}}
+							{{comment.user.lastName}}</strong>
+						<hr>
+						<blockquote>{{ comment.content | nl2br | striptags('<br><b>') | replace({'&lt;div&gt;':'','&lt;/div&gt;':''}) | raw}}</blockquote>
+						<strong>Note:</strong>
+						{{comment.rating}}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+
+	{% endif %}
+{% endblock %}

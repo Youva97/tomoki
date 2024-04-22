@@ -1,97 +1,104 @@
 {% extends 'base.html.twig' %}
-{% block title %}Mon panier - Tomoki
+
+{% block title %}
+	Mon panier - TOMOKI
 {% endblock %}
+
 {% block content %}
-	<h1>Mon panier</h1>
-	<p>Retrouver l'ensemble des produits ajoutés au panier</p>
-	<a href="{{ path('products') }}" class="btn btn-success col-3">Continuer mes Achats</a>
-	<hr>
-	{% if cart | length > 0 %}
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">Produits</th>
-					<th scope="col">Noms</th>
-					<th scope="col">Quantité</th>
-					<th scope="col">Prix</th>
-					<th scope="col">Total</th>
-					<th scope="col"></th>
-				</tr>
-			</thead>
-			<tbody>
-				{% set total = null %}
-				{% for product in cart %}
-					<tr>
-						<td>
-							{% if product.product is not null and product.product.illustration is not null %}
-								<img src="/uploads/{{ product.product.illustration }}" alt="{{ product.product.name }}" style="height:100px; width=100px">
-							{% else %}
-								N/A
-							{% endif %}
-						</td>
-						<td>
-							{% if product.product is not null %}
-								{{ product.product.name }}<br>
-								<i>{{ product.product.subtitle }}</i>
-							{% else %}
-								N/A
-							{% endif %}
-						</td>
-						<td>
-							{% if product.product is not null and product.product.id is not null %}
-								<a href="{{path('decrease_to_cart',{'id':product.product.id})}}" class="btn btn-danger">
-									<i class="fas fa-minus-square"></i>
-								</a>
-								{{product.quantity}}
-								<a href="{{path('add_to_cart',{'id':product.product.id})}}" class="btn btn-success">
-									<i class="fas fa-plus-square"></i>
-								</a>
-							{% else %}
-								N/A
-							{% endif %}
-						</td>
-						<td>
-							{% if product.product is not null and product.product.price is not null %}
-								{{ (product.product.price / 100) | number_format(2) }}€
-							{% else %}
-								N/A
-							{% endif %}
-						</td>
-						<td>
-							{% if product.product is not null and product.product.price is not null %}
-								{% set productTotal = product.product.price * product.quantity %}
-								{{ (productTotal / 100) | number_format(2) }}€
-								{% set total = total + productTotal %}
-							{% else %}
-								N/A
-							{% endif %}
-						</td>
-						<td>
-							{% if product.product is not null and product.product.id is not null %}
-								<a href="{{ path('delete_to_product', {'id': product.product.id}) }}" class="btn btn-danger">
-									<i class="fas fa-trash-alt"></i>
-								</a>
-							{% else %}
-								N/A
-							{% endif %}
-						</td>
-					</tr>
-				</td>
-			</tbody>
-		</tr>
-	{% endfor %}
-</tbody>
-</table>
-<div class="text-end p-2 m-2">
-<b>Nombre de produits:{{ cart | length }}</b>
-<b><br>Total de mon panier:
-	{{ (total / 100) | number_format(2) }}€</b>
-<div class="d-flex justify-content-between">
-	<a href="{{ path('remove_my_cart') }}" class="btn btn-danger col-6">Annuler mon panier</a>
-	<a href="{{path('order')}}" class="btn btn-success col-6">Valider mon panier</a>
-</div>
-</div>
-{% else %}
-<p><b>Votre panier est vide</b></p>
-{% endif %}
+	<div class="container py-5">
+		<h1>Mon panier</h1>
+		<p>Retrouvez l'ensemble des produits ajoutés au panier</p>
+		<a href="{{ path('products') }}" class="btn btn-success mb-4">Continuer mes achats</a>
+		<hr>
+		{% if cart | length > 0 %}
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Produits</th>
+							<th scope="col">Noms</th>
+							<th scope="col">Quantité</th>
+							<th scope="col">Prix</th>
+							<th scope="col">Total</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% set total = 0 %}
+						{% for product in cart %}
+							<tr>
+								<td>
+									{% if product.product is not null and product.product.illustration is not null %}
+										<img src="/uploads/{{ product.product.illustration }}" alt="{{ product.product.name }}" style="height:100px; width:100px" class="img-fluid">
+									{% else %}
+										N/A
+									{% endif %}
+								</td>
+								<td>
+									{% if product.product is not null %}
+										<p class="mb-0">{{ product.product.name }}</p>
+										<p class="text-muted">{{ product.product.subtitle }}</p>
+									{% else %}
+										N/A
+									{% endif %}
+								</td>
+								<td>
+									{% if product.product is not null and product.product.id is not null %}
+										<div class="d-flex">
+											<a href="{{ path('decrease_to_cart',{'id':product.product.id}) }}" class="btn btn-sm btn-danger me-2">
+												<i class="fas fa-minus"></i>
+											</a>
+											<span>{{ product.quantity }}</span>
+											<a href="{{ path('add_to_cart',{'id':product.product.id}) }}" class="btn btn-sm btn-success ms-2">
+												<i class="fas fa-plus"></i>
+											</a>
+										</div>
+									{% else %}
+										N/A
+									{% endif %}
+								</td>
+								<td>
+									{% if product.product is not null and product.product.price is not null %}
+										{{ (product.product.price / 100) | number_format(2) }}€
+									{% else %}
+										N/A
+									{% endif %}
+								</td>
+								<td>
+									{% if product.product is not null and product.product.price is not null %}
+										{% set productTotal = product.product.price * product.quantity %}
+										{{ (productTotal / 100) | number_format(2) }}€
+										{% set total = total + productTotal %}
+									{% else %}
+										N/A
+									{% endif %}
+								</td>
+								<td>
+									{% if product.product is not null and product.product.id is not null %}
+										<a href="{{ path('delete_to_product', {'id': product.product.id}) }}" class="btn btn-sm btn-danger">
+											<i class="fas fa-trash-alt"></i>
+										</a>
+									{% else %}
+										N/A
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="text-end mt-4">
+				<p class="fw-bold">Nombre de produits:
+					{{ cart | length }}</p>
+				<p class="fw-bold">Total de mon panier:
+					{{ (total / 100) | number_format(2) }}€</p>
+				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+					<a href="{{ path('remove_my_cart') }}" class="btn btn-danger me-md-2 mb-2 mb-md-0">Annuler mon panier</a>
+					<a href="{{ path('order') }}" class="btn btn-success">Valider mon panier</a>
+				</div>
+			</div>
+		{% else %}
+			<p>Votre panier est vide</p>
+		{% endif %}
+	</div>
 {% endblock %}

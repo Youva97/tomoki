@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="{{ path('home')}}">Tomoki</a>
+		<a class="navbar-brand" href="{{ path('home') }}">Tomoki</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -15,32 +15,27 @@
 				<li class="nav-item">
 					<a class="nav-link active" aria-current="page" href="#">Contact</a>
 				</li>
-
-
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				{% if (app.user) %}
+				{% if app.user %}
 					<li class="nav-item active">
-						<a href="{{path('deconnexion')}}" class="nav-link">Déconnexion</a>
+						<a href="{{ path('deconnexion') }}" class="nav-link">Déconnexion</a>
 					</li>
 					<li class="nav-item active">
-						<a href="{{path('account')}}" class="nav-link">Mon compte
-							<small>({{app.user.firstName}})</small>
+						<a href="{{ path('account') }}" class="nav-link">Mon compte<small>({{ app.user.firstName }})</small>
 						</a>
 					</li>
 				{% else %}
 					<li class="nav-item active">
-						<a href="{{path('register')}}" class="nav-link">Inscription</a>
+						<a href="{{ path('register') }}" class="nav-link">Inscription</a>
 					</li>
 					<li class="nav-item active">
-						<a href="{{path('connexion')}}" class="nav-link">Connexion</a>
+						<a href="{{ path('connexion') }}" class="nav-link">Connexion</a>
 					</li>
 				{% endif %}
-
-				<!-- Ajoutez la ligne suivante -->
 				<li class="nav-item active">
-					<a class="nav-link" href="{{path('cart')}}">
-					Panier
+					<a class="nav-link" href="{{ path('cart') }}">
+						Panier
 						<i class="fas fa-shopping-cart"></i>
 					</a>
 				</li>

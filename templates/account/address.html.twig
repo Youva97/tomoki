@@ -1,17 +1,18 @@
 {% extends 'base.html.twig' %}
-{% block title %}Mes Adresses - Tomoki
+
+{% block title %}
+	Mes Adresses - TOMOKI
 {% endblock %}
+
 {% block content %}
-	<a href="{{path('account_address_add')}}" class="p-2 m-3 btn btn-primary btn-md float-end ">Ajoutez une nouvelle addresse</a>
+	<a href="{{path('account_address_add')}}" class="p-2 m-3 btn btn-primary btn-md float-end ">Ajouter une nouvelle adresse</a>
 
 	<h1>Mes adresses</h1>
-	<p>Dans cet espace , vous pouvez gérer toutes vos adresses</p>
+	<p>Dans cet espace, vous pouvez gérer toutes vos adresses</p>
 
-	<div
-		class="d-flex justify-content-between">
-		{# <a href="{{path('account_address_add')}}" class="p-2 m-3 btn btn-primary btn-md col-6">Ajouter une adresse</a> #}
+	<div class="d-flex justify-content-between">
 		<br>
-		<a href="{{path('account')}}" class="p-2 m-3 btn btn-info btn-md col-6">Retour</a>
+		<a href="{{path('account')}}" class="p-2 m-3 btn btn-outline-info btn-md col-4">Retour</a>
 		<br>
 	</div>
 	<hr>
@@ -32,7 +33,7 @@
 								{{address.city}}
 							</p>
 							<a href="{{path('account_address_edit',{'id':address.id})}}" class="card-link btn btn-info">Modifier</a>
-							<a href="{{path('account_address_delete',{'id':address.id})}}" class="card-link btn btn-danger" onclick="return confirm('Etes- vous sur de vouloir supprimer l\'adresse {{address.name}} ?')">Supprimer</a>
+							<a href="{{path('account_address_delete',{'id':address.id})}}" class="card-link btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l\'adresse {{address.name}} ?')">Supprimer</a>
 						</div>
 					</div>
 				</div>

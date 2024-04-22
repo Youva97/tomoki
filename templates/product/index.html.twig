@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Produits - Tomoki
+{% block title %}
+	Nos Produits - TOMOKI
 {% endblock %}
 
 {% block content %}
 	<h1 class="mt-3">Nos Produits</h1>
 	<div class="row">
 		<div class="col-md-3">
-			Mes Filtres
+			<h3>Mes Filtres</h3>
 			{{ form_start(form) }}
 			{{ form_end(form) }}
 			<a href="{{ path('products') }}" class="btn btn-danger">Réinitialiser filtre</a>
@@ -23,8 +24,7 @@
 							<div class="card-body text-center">
 								<h5 class="card-title font-weight-bold">{{ product.name }}</h5>
 								<p class="card-text">{{ product.subtitle }}</p>
-								<p style="font-weight: bold">{{ (product.price / 100) | number_format(2) }}
-									€</p>
+								<p style="font-weight: bold">{{ (product.price / 100) | number_format(2) }}€</p>
 								<div>Catégorie:
 									<p>{{ product.category.name }}</p>
 								</div>
@@ -35,16 +35,10 @@
 										<hr>
 									</div>
 								{% endif %}
-								<button type="button" class="btn btn-success">
-
-									<a href="{{ path('product', {'slug': product.slug}) }}" class="btn btn-success">Détails</a>
-
-								</button>
-								<button type="button" class="btn btn-primary">
-
-									<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier <i class="fas fa-cart-plus"></i></a>
-
-								</button>
+								<a href="{{ path('product', {'slug': product.slug}) }}" class="btn btn-outline-info mb-4">Détails</a>
+								<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mb-4">Ajouter au panier
+									<i class="fas fa-cart-plus"></i>
+								</a>
 							</div>
 						</div>
 					</div>

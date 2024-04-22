@@ -1,18 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-	<h1>Mon compte</h1>
-	Bienvenu
-	{{app.user.firstName}}
-	- Vous pourrez gérer toutes vos informations personnelles dans cet espace.
-	<br>
-	<br>
-	<div class="d-flex justify-content-between">
-		<a href="{{path('account_password')}}" class="p-2 m-3 btn btn-info col-3">Modifier mon mot de passe</a>
-		<br>
-		<a href="{{path('account_address')}}" class="p-2 m-3 btn btn-success col-3">Gérer mes adresses</a>
-		<br>
-		<a href="" class="p-2 m-3 btn btn-success col-3">Mes commandes</a>
-		<br>
+	<div class="container py-5">
+		<h1>Mon compte</h1>
+		<p>Bienvenue,
+			{{ app.user.firstName }}. Vous pourrez gérer toutes vos informations personnelles dans cet espace.</p>
+		<div class="row">
+			<div class="col-md-4">
+				<a href="{{ path('account_password') }}" class="btn btn-outline-success btn-lg btn-block my-3">Modifier mon mot de passe</a>
+			</div>
+			<div class="col-md-4">
+				<a href="{{ path('account_address') }}" class="btn btn-outline-success btn-lg btn-block my-3">Gérer mes adresses</a>
+			</div>
+			<div class="col-md-4">
+				<a href="{{ path('account_order') }}" class="btn btn-outline-success btn-lg btn-block my-3">Mes commandes</a>
+			</div>
+		</div>
 	</div>
 {% endblock %}

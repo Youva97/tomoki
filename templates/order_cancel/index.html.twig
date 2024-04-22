@@ -1,41 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Erreur de paiement - Tomoki
+	Erreur de paiement - Tomoki
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card border-0 shadow">
-                    <div class="card-body">
-                        <h2 class="card-title">
-                            Erreur de paiement
-                        </h2>
-                        <p class="card-text">
-                            Bonjour
-                            {{ order.user.firstName }}
-                            {{ order.user.lastName }}
-                            ,
-                        </p>
-                        <p class="card-text">
-                            Il semblerait que votre paiement ait échoué pour la commande n°
-                            {{ order.reference }}
-                            .
-                        </p>
-                        <p class="card-text">
-                            Une confirmation d'erreur vient d'être envoyée à l'adresse email :
-                            {{ order.user.email }}
-                            .
-                        </p>
-                        <hr>
-                        <a href="{{ path('order') }}" class="btn btn-success">
-                            Réessayer le paiement
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 offset-md-2">
+				<div class="card border-0 shadow">
+					<div class="card-body">
+						<h2 class="card-title">
+							Erreur de paiement
+						</h2>
+						<p class="card-text">
+							Bonjour
+							{{ order.user.firstName }}
+							{{ order.user.lastName }},
+						</p>
+						<p class="card-text">
+							Il semble que votre paiement ait échoué pour la commande n°
+							{{ order.reference }}.
+						</p>
+						<p class="card-text">
+							Une confirmation d'erreur vient d'être envoyée à l'adresse email :
+							{{ order.user.email }}.
+						</p>
+						<hr>
+						<a href="{{ path('order') }}" class="btn btn-success">
+							Réessayer le paiement
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

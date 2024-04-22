@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\OrderRepository;
+use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -11,19 +13,21 @@ class HomeController extends AbstractController
 {
 
     #[Route('/', name: 'home')]
-    public function index(RequestStack $requestStack): Response {
+    public function index(RequestStack $requestStack, OrderRepository $repo): Response
+    {
+
+        // dd($repo->findOrder('gaelmineas971@gmail.com'));
         // dump($requestStack->getSession()->get('cart')); 
         $panier = $requestStack->getSession()->get('cart', []); // si le panier est vide on renvoit un tableau vide 
         // dump($panier); 
-        $panier[12] = 34; 
-        $requestStack->getSession('cart', $panier); 
+        $panier[12] = 34;
+        $requestStack->getSession('cart', $panier);
         // dump($panier); 
-        $panier[7] = 6; 
-        $requestStack->getSession()->set('cart', $panier); 
+        $panier[7] = 6;
+        $requestStack->getSession()->set('cart', $panier);
         // dump($panier); 
-        $requestStack->getSession()->remove('cart'); 
-        // dump($requestStack->getSession()->get('cart')); 
-        return $this->render('home/index.html.twig'); 
+        $requestStack->getSession()->remove('cart');
+        // dump($requestStack->getSession()->get('cart'));
+        return $this->render('home/index.html.twig');
     }
-
 }

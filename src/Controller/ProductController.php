@@ -13,55 +13,55 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProductController extends AbstractController
 {
-    #[Route(path: '/nos-produits', name: 'products')] 
-    public function index(ProductRepository $repo, Request $request): Response {
+    #[Route(path: '/nos-produits', name: 'products')]
+    public function index(ProductRepository $repo, Request $request): Response
+    {
 
-        $search = new SearchFilters(); 
-        $form = $this->createForm(SearchFiltersType::class, $search); 
-        $form->handleRequest($request); 
+        $search = new SearchFilters();
+        $form = $this->createForm(SearchFiltersType::class, $search);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // on récupère les catégories sélectionnées 
-            $categorie_selectionnee = $search->getCategories(); //dump($categorie_selectionnee); 
-            // si des categories ont été selectionnées 
-            if (count($categorie_selectionnee) > 0) { //on récupère tous les ids des catégories que l'on met dans un tableau 
 
-                foreach ($categorie_selectionnee as $categorie) { 
-                    $id_tab[] = $categorie->getId(); //dump($categorie); 
-                } //dump($id_cat); // $products = $repo->findBy(['category' => ['410', '413']]); 
+            if (count($search->getCategories()) > 0 || $search->getString()) {
+                //on récupère tous les ids des catégories que l'on met dans un tableau 
 
-                $products = $repo->findBy(['category' => $id_tab]); 
+                /*                 foreach ($categorie_selectionnee as $categorie) {
+                    $id_tab[] = $categorie->getId(); 
+                } */
 
-                if (!$products) { 
-                    $error = "Il n'y a pas de produits disponibles"; 
+                $products = $repo->findWithSearch($search);
+                /* $products = $repo->findBy(['category' => $id_tab]);  */
+
+                if (!$products) {
+                    $error = "Il n'y a pas de produits disponibles";
                 } else $error = null; //dump($products); 
 
-            } else { 
+            } else {
                 if ($products = $repo->findAll()) //recupère tous les enregistrements de la table visée 
-                $error = null; 
-                else $error = "Il n'y a pas de produits disponibles"; 
-            } 
-            
+                    $error = null;
+                else $error = "Il n'y a pas de produits disponibles";
+            }
         } else {
             if ($products = $repo->findAll()) //recupère tous les enregistrements de la table visée 
-            $error = null; 
-            else $error = "Il n'y a pas de produits disponibles"; 
-        } 
-        
-        return 
-        $this->render('product/index.html.twig', [ 
-            'products' => $products, 
-            "form" => $form->createView(), 
-            'error' => $error, 
-        ]); 
+                $error = null;
+            else $error = "Il n'y a pas de produits disponibles";
+        }
+
+        return
+            $this->render('product/index.html.twig', [
+                'products' => $products,
+                "form" => $form->createView(),
+                'error' => $error,
+            ]);
     }
 
     #[Route('/produit/{slug}', name: 'product')]
-    public function product(Product $product){
+    public function product(Product $product)
+    {
 
-        return $this->render('product/show.html.twig', [ 
+        return $this->render('product/show.html.twig', [
             'product' => $product
         ]);
     }
-
 }
