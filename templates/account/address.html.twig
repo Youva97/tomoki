@@ -5,39 +5,41 @@
 {% endblock %}
 
 {% block content %}
-	<a href="{{path('account_address_add')}}" class="p-2 m-3 btn btn-primary btn-md float-end ">Ajouter une nouvelle adresse</a>
+	<div class="container mt-4">
+		<div class="d-flex justify-content-between mb-3">
+			<h1 class="flex-grow-1">Mes adresses</h1>
+			<a href="{{ path('account_address_add') }}" class="btn btn-primary">Ajouter une nouvelle adresse</a>
+		</div>
+		<p>Dans cet espace, vous pouvez gérer toutes vos adresses.</p>
+		<a href="{{ path('account') }}" class="btn btn-outline-info mb-3">Retour à votre compte</a>
+		<hr>
 
-	<h1>Mes adresses</h1>
-	<p>Dans cet espace, vous pouvez gérer toutes vos adresses</p>
-
-	<div class="d-flex justify-content-between">
-		<br>
-		<a href="{{path('account')}}" class="p-2 m-3 btn btn-outline-info btn-md col-4">Retour</a>
-		<br>
-	</div>
-	<hr>
-	{% if app.user.addresses | length == 0 %}
-		<p class="text-center">Il n'y a pas d'adresses enregistrées dans votre compte client</p>
-	{% else %}
-		<div class="row">
-			{% for address in app.user.addresses %}
-				<div class="col-md-4">
-					<div class="card" style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title">{{address.name}}</h5>
-							<p class="card-text">
-								{{address.address}}
-								<br>
-								{{address.postal}}
-								-
-								{{address.city}}
-							</p>
-							<a href="{{path('account_address_edit',{'id':address.id})}}" class="card-link btn btn-info">Modifier</a>
-							<a href="{{path('account_address_delete',{'id':address.id})}}" class="card-link btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l\'adresse {{address.name}} ?')">Supprimer</a>
+		{% if app.user.addresses | length == 0 %}
+			<p class="text-center">Il n'y a pas d'adresses enregistrées dans votre compte client.</p>
+		{% else %}
+			<div class="row">
+				{% for address in app.user.addresses %}
+					<div class="col-md-4 mb-4">
+						<div class="card h-100">
+							<div class="card-body">
+								<h5 class="card-title">{{ address.name }}</h5>
+								<p class="card-text">
+									{{ address.address }}<br>
+									{{ address.postal }}
+									-
+									{{ address.city }}
+								</p>
+							</div>
+							<div class="card-footer">
+								<a href="{{ path('account_address_edit', {'id': address.id}) }}" class="btn btn-info">Modifier</a>
+								<a href="{{ path('account_address_delete', {'id': address.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l\'adresse {{ address.name | e('js') }} ?');">
+									Supprimer
+								</a>
+							</div>
 						</div>
 					</div>
-				</div>
-			{% endfor %}
-		</div>
-	{% endif %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}

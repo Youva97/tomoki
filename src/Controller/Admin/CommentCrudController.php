@@ -26,12 +26,13 @@ class CommentCrudController extends AbstractCrudController
     {
         return [
             AssociationField::new('user')->onlyOnIndex()->formatValue(function ($value, $comment) {
-                return $comment->getUser()->getFullName().''.$comment->getUser()->getEmail();                
+                return $comment->getUser()->getFullName() . '' . $comment->getUser()->getEmail();
             }),
-            TextareaField::new('content')->setLabel('Commentaires')->stripTags()->setMaxLength(300), 
-            IntegerField::new('rating')->setLabel('Vote'), 
+            TextareaField::new('content')->setLabel('Commentaires')->stripTags()->setMaxLength(300),
+            IntegerField::new('rating')->setLabel('Vote'),
             DateField::new('createdAt')->setLabel('Date'),
-            BooleanField::new('status')->setLabel('affiché'),
+            BooleanField::new('status')->setLabel('affiché')
+                ->renderAsSwitch(true),
         ];
-    }   
+    }
 }

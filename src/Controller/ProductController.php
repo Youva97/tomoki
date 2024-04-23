@@ -7,6 +7,7 @@ use App\Entity\Product;
 use App\Entity\SearchFilters;
 use App\Form\CommentType;
 use App\Form\SearchFiltersType;
+use App\Repository\CommentRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,18 +61,21 @@ class ProductController extends AbstractController
     }
 
     #[Route('/produit/{slug}', name: 'product')]
-    public function product(Product $product)
+    public function product(Product $product, CommentRepository $commentRepo)
     {
+        $approvedComments  = $commentRepo->findAllComment(true);
 
 
         return $this->render('product/show.html.twig', [
-            'product' => $product
+            'product' => $product,
+            'comments' => $approvedComments
         ]);
     }
 
-    #[Route("/compte/mes-commandes/{slug}/comment", name:"comment_product")]
-    public function comment(Product $product, Request $request, EntityManagerInterface $manager) :Response {
-        
+    #[Route("/compte/mes-commandes/{slug}/comment", name: "comment_product")]
+    public function comment(Product $product, Request $request, EntityManagerInterface $manager): Response
+    {
+
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
 
@@ -81,23 +85,21 @@ class ProductController extends AbstractController
             $comment->setCreatedAt(new \DateTime());
             $comment->setUser($this->getUser());
             $comment->setProduct($product);
+            $comment->setStatus(false);
             $manager->persist($comment);
             $manager->flush();
 
             $this->addFlash(
                 'success',
-                'Le commentaire pour le produit' .$product->getName() . 'a bien été enregistrer!'
+                'Le commentaire pour le produit' . $product->getName() . 'a bien été enregistrer!'
             );
 
             return $this->redirectToRoute('product', ['slug' => $product->getSlug()]);
         }
 
-        return $this->render('product/comment.html.twig' , [
+        return $this->render('product/comment.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
         ]);
-
     }
-
-
 }

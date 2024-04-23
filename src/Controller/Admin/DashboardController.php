@@ -5,10 +5,11 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Carrier;
+use App\Entity\Comment;
 use App\Entity\Product;
 use App\Entity\Category;
-use App\Entity\Comment;
 use App\Repository\OrderRepository;
+use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -20,6 +21,7 @@ class DashboardController extends AbstractDashboardController
 {
 
     private $order;
+    private $commentRepository;
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response
@@ -75,19 +77,20 @@ class DashboardController extends AbstractDashboardController
             'fas fa-shopping-cart',
             Order::class
         );
-        $nbrsCommentWait = count($this->order->findBy(['statut' => 0]));
-        $nbrsCommentOk = count($this->order->findBy(['statut' => 1]));
+        $nbrsCommentWait = count($this->commentRepository->findBy(['status' => false]));
+        $nbrsCommentOk = count($this->commentRepository->findBy(['status' => true]));
         yield MenuItem::linkToCrud(
             'commentaires <span style="color:green;font-weight:bold" class="badge badge-success">' . $nbrsCommentOk .
-            '</span> <span style="color:red;font-weight:bold" class="badge badge-danger">' . $nbrsCommentWait .
-            '</span>', 
-            'fas fa-comments', 
+                '</span> <span style="color:red;font-weight:bold" class="badge badge-danger">' . $nbrsCommentWait .
+                '</span>',
+            'fas fa-comments',
             Comment::class
         );
     }
 
-    public function __construct(OrderRepository $order)
+    public function __construct(OrderRepository $order, CommentRepository $commentRepository)
     {
         $this->order = $order;
+        $this->commentRepository = $commentRepository;
     }
 }

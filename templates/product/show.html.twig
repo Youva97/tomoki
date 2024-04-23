@@ -35,23 +35,27 @@
 		{% if product.comments|length > 0 %}
 			<div class="mt-4">
 				<h3>Commentaires des utilisateurs</h3>
-				{% for comment in product.comments %}			
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title">{{ comment.user.firstName }}
-								{{ comment.user.lastName }}</h5>
-							<p class="card-text">{{ comment.content | nl2br | striptags('<br><b>') | raw }}</p>
-							<div>
-								<strong>Note:</strong>
-								{% include 'partials/rating.html.twig' with {'rating': comment.rating} %}
+				{% for comment in product.comments %}
+					{% if comment.status %}
+
+						<div class="card mb-3">
+							<div class="card-body">
+								<h5 class="card-title">{{ comment.user.firstName }}
+									{{ comment.user.lastName }}</h5>
+								<p class="card-text">{{ comment.content | nl2br | striptags('<br><b>') | raw }}</p>
+								<div>
+									<strong>Note:</strong>
+									{% include 'partials/rating.html.twig' with {'rating': comment.rating} %}
+								</div>
 							</div>
 						</div>
-					</div>
-				
+					{% endif %}
+
+
 				{% endfor %}
 			</div>
 		{% else %}
-			<div class="alert alert-secondary mt-3">Il n'y a pas de commentaires</div>
+			<div class="alert alert-secondary mt-3">Aucun commentaire n'a encore été validé pour ce produit.</div>
 		{% endif %}
 
 		<div class="alert alert-info mt-3">
@@ -63,4 +67,3 @@
 		</div>
 	</div>
 {% endblock %}
-
