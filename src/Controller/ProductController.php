@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Product;
 use App\Entity\SearchFilters;
+use App\Form\CommentType;
 use App\Form\SearchFiltersType;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -60,8 +63,41 @@ class ProductController extends AbstractController
     public function product(Product $product)
     {
 
+
         return $this->render('product/show.html.twig', [
             'product' => $product
         ]);
     }
+
+    #[Route("/compte/mes-commandes/{slug}/comment", name:"comment_product")]
+    public function comment(Product $product, Request $request, EntityManagerInterface $manager) :Response {
+        
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setCreatedAt(new \DateTime());
+            $comment->setUser($this->getUser());
+            $comment->setProduct($product);
+            $manager->persist($comment);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Le commentaire pour le produit' .$product->getName() . 'a bien été enregistrer!'
+            );
+
+            return $this->redirectToRoute('product', ['slug' => $product->getSlug()]);
+        }
+
+        return $this->render('product/comment.html.twig' , [
+            'product' => $product,
+            'form' => $form->createView(),
+        ]);
+
+    }
+
+
 }

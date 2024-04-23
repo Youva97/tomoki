@@ -1,66 +1,49 @@
 {% extends 'base.html.twig' %}
-{% block title %}Ma Commande - TOMOKI
-{% endblock %}
+
+{% block title %}Ma Commande - TOMOKI{% endblock %}
+
 {% block content %}
-	<div class="container py-5">
-		<h1 class="mb-4">Ma Commande -
-			{{ order.reference }}</h1>
-		<a href="{{ path('account_order') }}" class="btn btn-outline-success mb-4">Retour</a>
-		<hr>
-		<div class="row">
-			<div class="col-md-6">
-				<p>
-					<strong>Commande passée le:</strong>
-					{{ order.createdAt|date('d/m/Y') }}</p>
-				<p>
-					<strong>Référence de ma commande:</strong>
-					{{ order.reference }}</p>
-				<p>
-					<strong>Transporteur choisi:</strong>
-					{{ order.carrier.name }}</p>
-			</div>
-		</div>
-		<hr>
-		<h2 class="mb-4">Détails de la commande</h2>
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">Produit</th>
-					<th scope="col">Commentaires</th>
-					<th scope="col">Quantité</th>
-					<th scope="col">Prix unitaire</th>
-					<th scope="col">Total</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for product in order.orderDetails %}
-					<tr>
-						<td>{{ product.product.name }}</td>
-						<td>
-							<a href="#" class="btn btn-link">Voir les commentaires</a>
-						</td>
-						<td>x{{ product.quantity }}</td>
-						<td>{{ (product.price / 100)|number_format(2) }}
-							€</td>
-						<td>{{ (product.price * product.quantity / 100)|number_format(2) }}
-							€</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		<div class="text-end">
-			<p>
-				<strong>Sous Total:</strong>
-				{{ (order.total / 100)|number_format(2) }}
-				€</p>
-			<p>
-				<strong>Livraison:</strong>
-				{{ (order.carrier.price / 100)|number_format(2) }}
-				€</p>
-			<p>
-				<strong>Total:</strong>
-				{{ ((order.carrier.price + order.total) / 100)|number_format(2) }}
-				€</p>
-		</div>
-	</div>
+<div class="container py-5">
+    <h1 class="mb-4">Ma Commande - {{ order.reference }}</h1>
+    <a href="{{ path('account_order') }}" class="btn btn-outline-success mb-4">Retour</a>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Commande passée le:</strong> {{ order.createdAt|date('d/m/Y') }}</p>
+            <p><strong>Référence de ma commande:</strong> {{ order.reference }}</p>
+            <p><strong>Transporteur choisi:</strong> {{ order.carrier.name }}</p>
+        </div>
+    </div>
+    <hr>
+    <h2 class="mb-4">Détails de la commande</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Produit</th>
+                <th scope="col">Commentaires</th>
+                <th scope="col">Quantité</th>
+                <th scope="col">Prix unitaire</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in order.orderDetails %}
+            <tr>
+                <td>{{ product.product.name }}</td>
+                <td scope="col">
+                    <a href="{{ path('comment_product', {'slug': product.product.slug}) }}" class="nav-link hover-custom">Votre commentaire</a>
+                </td>
+                <td>x{{ product.quantity }}</td>
+                <td>{{ (product.price / 100)|number_format(2) }}€</td>
+                <td>{{ (product.price * product.quantity / 100)|number_format(2) }}€</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <p><strong>Sous Total:</strong> {{ (order.total / 100)|number_format(2) }}€</p>
+        <p><strong>Livraison:</strong> {{ (order.carrier.price / 100)|number_format(2) }}€</p>
+        <p><strong>Total:</strong> {{ ((order.carrier.price + order.total) / 100)|number_format(2) }}€</p>
+    </div>
+</div>
 {% endblock %}

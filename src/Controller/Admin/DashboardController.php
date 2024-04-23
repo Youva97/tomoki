@@ -7,6 +7,7 @@ use App\Entity\Order;
 use App\Entity\Carrier;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -73,6 +74,15 @@ class DashboardController extends AbstractDashboardController
                 '</span>',
             'fas fa-shopping-cart',
             Order::class
+        );
+        $nbrsCommentWait = count($this->order->findBy(['statut' => 0]));
+        $nbrsCommentOk = count($this->order->findBy(['statut' => 1]));
+        yield MenuItem::linkToCrud(
+            'commentaires <span style="color:green;font-weight:bold" class="badge badge-success">' . $nbrsCommentOk .
+            '</span> <span style="color:red;font-weight:bold" class="badge badge-danger">' . $nbrsCommentWait .
+            '</span>', 
+            'fas fa-comments', 
+            Comment::class
         );
     }
 

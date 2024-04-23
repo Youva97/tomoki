@@ -21,6 +21,19 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
+    public function findAllComment() {
+        $queryBuilder = $this->createQueryBuilder('com')
+            ->where('com.status = :status')
+            ->setParameter('status', 1); // Set status to 1 to fetch only comments with status = 1
+        $query = $queryBuilder->getQuery();
+        // Retrieve the results
+        $result = $query->getResult();
+    
+        return $result;
+        dd($result);
+    }
+    
+
 //    /**
 //     * @return Comment[] Returns an array of Comment objects
 //     */

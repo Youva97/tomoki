@@ -1,49 +1,59 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Nos Produits - TOMOKI
+    Nos Produits - TOMOKI
 {% endblock %}
 
 {% block content %}
-	<h1 class="mt-3">Nos Produits</h1>
-	<div class="row">
-		<div class="col-md-3">
-			<h3>Mes Filtres</h3>
-			{{ form_start(form) }}
-			{{ form_end(form) }}
-			<a href="{{ path('products') }}" class="btn btn-danger">Réinitialiser filtre</a>
-		</div>
-		<div class="col-md-9">
-			<div class="row">
-				{% for product in products %}
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<a href="{{ path('product', {'slug': product.slug}) }}">
-								<img src="/uploads/{{ product.illustration }}" alt="{{ product.name }}" class="card-img-top">
-							</a>
-							<div class="card-body text-center">
-								<h5 class="card-title font-weight-bold">{{ product.name }}</h5>
-								<p class="card-text">{{ product.subtitle }}</p>
-								<p style="font-weight: bold">{{ (product.price / 100) | number_format(2) }}€</p>
-								<div>Catégorie:
-									<p>{{ product.category.name }}</p>
-								</div>
-								{% if error %}
-									<div class="alert alert-danger" role="alert">
-										<hr>
-										<h4 class="alert-heading">{{ error }}</h4>
-										<hr>
-									</div>
-								{% endif %}
-								<a href="{{ path('product', {'slug': product.slug}) }}" class="btn btn-outline-info mb-4">Détails</a>
-								<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary mb-4">Ajouter au panier
-									<i class="fas fa-cart-plus"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
-	</div>
+<div class="container mt-4">
+    <h1>Nos Produits</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <h3 class="mb-3">Mes Filtres</h3>
+            {{ form_start(form) }}
+            {{ form_end(form) }}
+            <a href="{{ path('products') }}" class="btn btn-danger mt-3">Réinitialiser le filtre</a>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="{{ path('product', {'slug': product.slug}) }}" class="text-center">
+                            <img src="/uploads/{{ product.illustration }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="max-height: 200px; width: auto;">
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <h6 class="text-muted">{{ product.subtitle }}</h6>
+                            <p class="card-text mt-auto">
+                                <strong>Prix :</strong> {{ (product.price / 100) | number_format(2) }} €
+                            </p>
+                            <p class="card-text">
+                                <strong>Catégorie :</strong> {{ product.category.name }}
+                            </p>
+                            <div class="mt-auto">
+                                <a href="{{ path('product', {'slug': product.slug}) }}" class="btn btn-outline-info">Détails</a>
+                                <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">
+                                    Ajouter au panier <i class="fas fa-cart-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small>Basé sur {{ product.comments | length }} commentaires</small>
+                                {% include 'partials/rating.html.twig' with {'rating': product.AVGRatings()} %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Erreur :</strong> {{ error }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

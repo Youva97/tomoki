@@ -16,6 +16,21 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512- 1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 	</head>
 	<body>
+		{% block stylesheet %}
+			<style>
+				.hover-custom {
+					transition: all 0.3s ease-in-out; /* Smooth transition for hover effect */
+					color: #007bff; /* Initial color, you can use any */
+				}
+				.hover-custom:hover,
+				.hover-custom:focus {
+					color: #0056b3; /* Darker blue when hovered or focused */
+					background-color: rgba(0, 123, 255, 0.1); /* Light background on hover for better visibility */
+					padding: 5px 8px; /* Slight padding for a button-like feel */
+					border-radius: 5px; /* Rounded corners for modern look */
+				}
+			</style>
+		{% endblock %}
 		<header data-bs-theme="dark">
 			{% include "partials/header.html.twig" %}
 		</header>
@@ -89,3 +104,4 @@
 		{% block javascript %}{% endblock %}
 	</body>
 </html>
+

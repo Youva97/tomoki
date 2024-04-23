@@ -6,41 +6,61 @@
 {% endblock %}
 
 {% block content %}
-	<div class="row">
-		<div class="col-md-5 mb-4 text-center p-2">
-			<img src="/uploads/{{ product.illustration }}" alt="{{ product.name }}" class="img-fluid">
-		</div>
-		<div class="col-md-7 mb-4 my-auto p-2">
-			<h3>{{ product.name }}</h3>
-			<p>{{ product.subtitle }}</p>
-			<b>{{ (product.price / 100) | number_format(2) }}€</b>
-			<hr>
-			<p>{{ product.description | striptags('<br><p><strong><b><img>') | raw }}</p>
-			<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier
-				<i class="fas fa-cart-plus"></i>
-			</a>
-			<a href="{{ path('products') }}" class="btn btn-secondary">Retour aux produits</a>
-		</div>
-	</div>
-	{# 	{% if product.comments| lenght > 0 %}
-				<div class="row">
-					<div class="col-md-5 mb-4 text-center p-2">
-						<h4>Commentaires des utilisateurs</h4>
+	<div class="container mt-4">
+		<div class="card">
+			<div class="row g-0">
+				<div class="col-md-6">
+					<img src="/uploads/{{ product.illustration }}" alt="{{ product.name }}" class="img-fluid rounded-start">
+				</div>
+				<div class="col-md-6">
+					<div class="card-body">
+						<h1 class="card-title">{{ product.name }}</h1>
+						<h5 class="text-muted">{{ product.subtitle }}</h5>
+						<p class="card-text">{{ product.description | striptags('<br><p><strong><b><img>') | raw }}</p>
+						<div class="mb-2">
+							<strong>Prix :</strong>
+							{{ (product.price / 100) | number_format(2) }}
+							€
+						</div>
+						<div>
+							<a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier<i class="fas fa-cart-plus ms-2"></i>
+							</a>
+							<a href="{{ path('products') }}" class="btn btn-outline-secondary ms-2">Retour aux produits</a>
+						</div>
 					</div>
-					{% for comment in product.comments %}
-						<div class="row alert-light mb-3">
-							<div class="col-md-7 mb-4 my-auto p-2">
-								<strong>{{comment.user.firstName}}
-									{{comment.user.lastName}}</strong>
-								<hr>
-								<blockquote>{{ comment.content | nl2br | striptags('<br><b>') | replace({'&lt;div&gt;':'','&lt;/div&gt;':''}) | raw}}</blockquote>
+				</div>
+			</div>
+		</div>
+
+		{% if product.comments|length > 0 %}
+			<div class="mt-4">
+				<h3>Commentaires des utilisateurs</h3>
+				{% for comment in product.comments %}			
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title">{{ comment.user.firstName }}
+								{{ comment.user.lastName }}</h5>
+							<p class="card-text">{{ comment.content | nl2br | striptags('<br><b>') | raw }}</p>
+							<div>
 								<strong>Note:</strong>
-								{{comment.rating}}
+								{% include 'partials/rating.html.twig' with {'rating': comment.rating} %}
 							</div>
 						</div>
-					{% endfor %}
-				</div>
-		
-		
-			{% endif %} #}
+					</div>
+				
+				{% endfor %}
+			</div>
+		{% else %}
+			<div class="alert alert-secondary mt-3">Il n'y a pas de commentaires</div>
+		{% endif %}
+
+		<div class="alert alert-info mt-3">
+			<strong>Note sur les commentaires :</strong>
+			{{ product.comments | length }}
+			<div>
+				{% include 'partials/rating.html.twig' with {'rating': product.AVGRatings()} %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
+

@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[UniqueEntity(fields: ['name'],message:'Ce nom est déjà utilisé')]    
+#[UniqueEntity(fields: ['name'], message: 'Ce nom est déjà utilisé')]
 #[ORM\HasLifecycleCallbacks]
 class Product
 {
@@ -27,13 +27,13 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 255)] 
+    #[ORM\Column(type: 'string', length: 255)]
     #[Gedmo\Slug(fields: ['name'])]
     private ?string $slug = null;
 
-    #[ORM\Column(type: 'string', length: 255)] 
-    #[Assert\NotBlank(message: 'Veuillez engistrer une image svp')] 
-    #[Assert\Regex( pattern: '#\.(jpg|png|gif)$#', match: true, message: 'Url doit se terminer par .jpg ou .png ou .gif')]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez engistrer une image svp')]
+    #[Assert\Regex(pattern: '#\.(jpg|png|gif)$#', match: true, message: 'Url doit se terminer par .jpg ou .png ou .gif')]
     private ?string $illustration = null;
 
     #[ORM\Column(length: 255)]
@@ -82,17 +82,18 @@ class Product
     {
         return $this->slug;
     }
-    #[ORM\PrePersist] 
-    #[ORM\PreUpdate] 
-    public function initializeSlug() { 
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function initializeSlug()
+    {
         // au moment de la création ou de la mise à jour 
-        $slugify = new Slugify(); 
-        $this->slug = $slugify->slugify($this->name); 
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($this->name);
         //dump($this->slug); 
     }
 
-    
-/*     public function setSlug(string $slug): static
+
+    /*     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
 
@@ -217,5 +218,37 @@ class Product
         }
 
         return $this;
+    }
+
+    public function AVGRatings()
+    {
+        $somme = 0;
+        foreach ($this->comments as $value) {
+            $somme = $somme + $value->getRating();
+        }
+
+        if (count($this->comments) > 0) {
+            return $somme / count($this->comments);
+        }
+
+        return 0;
+    }
+
+    public function getCommentFromUser(User $user)
+    {
+        foreach ($this->comments as $comment) {
+            if ($comment->getUser() === $user) return $comment;
+        }
+        return null;
+    }
+
+    public function isProductFromUser(User $user)
+    {
+        foreach ($user->getOrders() as $orders) {
+            foreach ($orders->getOrderDetails() as $order) {
+                if ($order->getProduct()->getId() === $this->id && $orders->getStatut()) return $order->getProduct();
+            }
+        }
+        return null;
     }
 }
