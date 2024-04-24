@@ -1,17 +1,70 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}Inscription Tomoki
 {% endblock %}
-{% block content %}
-	<h1 class="mt-4">Inscription</h1>
-	{#Mettre le nouveau formulaire sur la vue de la page pour améliorer le design du site#}
-	Mon formulaire d'inscription
-	{{form_start(form)}}
-	{{form_row(form.firstName,{'attr':{'title':'Titre avec un minimun de 10 caractères et au maximum 50 caractères'}})}}
-	{{form_row(form.lastName)}}
-	{{form_row(form.email)}}
-	{{form_row(form.password)}}
-	{{form_row(form.confirmPassword)}}
-	{{form_row(form.submit)}}
-	{{form_end(form)}}
 
+{% block content %}
+<div class="container mt-5">
+	<h1 class="mb-4 text-center">Inscription</h1>
+	<div class="row justify-content-center">
+		<div class="col-md-8">
+			<div class="card shadow">
+				<div class="card-body">
+					{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
+
+					<div class="mb-3">
+						{{ form_row(form.firstName, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Prénom',
+                                'title': 'Titre avec un minimum de 10 caractères et au maximum 50 caractères',
+                                'minlength': '10',
+                                'maxlength': '50',
+                                'required': 'required'
+                            },
+                            'label': 'Prénom'
+                        }) }}
+					</div>
+
+					<div class="mb-3">
+						{{ form_row(form.lastName, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Nom', 'required': 'required'},
+                            'label': 'Nom'
+                        }) }}
+					</div>
+
+					<div class="mb-3">
+						{{ form_row(form.email, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Email', 'required': 'required'},
+                            'label': 'Email'
+                        }) }}
+					</div>
+
+					<div class="mb-3">
+						{{ form_row(form.password, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Mot de passe', 'required': 'required'},
+                            'label': 'Mot de passe'
+                        }) }}
+					</div>
+
+					<div class="mb-3">
+						{{ form_row(form.confirmPassword, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Confirmez le mot de passe', 'required': 'required'},
+                            'label': 'Confirmation du mot de passe'
+                        }) }}
+					</div>
+
+					<div class="text-center">
+						{{ form_row(form.submit, {
+                            'attr': {'class': 'btn btn-outline-success'},
+                            'label': 'S\'inscrire'
+                        }) }}
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
