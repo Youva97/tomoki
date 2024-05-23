@@ -10,6 +10,8 @@ use App\Form\SearchFiltersType;
 use App\Repository\CommentRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,12 +20,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProductController extends AbstractController
 {
     #[Route(path: '/nos-produits', name: 'products')]
-    public function index(ProductRepository $repo, Request $request): Response
+    public function index(ProductRepository $repo, Request $request, PaginatorInterface $paginator): Response
     {
 
         $search = new SearchFilters();
         $form = $this->createForm(SearchFiltersType::class, $search);
         $form->handleRequest($request);
+        $page = 1; // numéro de la page 
+        $limit = 100; // on veut 100 enregistrements 
+        $offset = $page * $limit - $limit; // 1 * 10 -10 = 0 // 2 * 10 -10 = 10 
+        $products = $repo->findAll($offset, $limit);
+        $total = count($products); // nombres d'enregistrements totals 
+        $pages = ceil($total / $limit); // nombres de pages totales
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -35,6 +43,13 @@ class ProductController extends AbstractController
                 } */
 
                 $products = $repo->findWithSearch($search);
+                $donnees = $repo->findBy(['category' => $search]);
+
+                $products = $paginator->paginate(
+                    $donnees, //on passe les données // $request->query->getInt('page', 1), /*page number*/ 
+                    $page, // page sur laquelle on se trouve 
+                    10 /*limit per page*/
+                );
                 /* $products = $repo->findBy(['category' => $id_tab]);  */
 
                 if (!$products) {

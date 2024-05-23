@@ -51,18 +51,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'Les deux mots de passe ne sont pas identiques',
     )]
 
+    /*     #[Assert\NotBlank(message: "Vous devez entrer une confirmation de mot de passe")] */
+    #[Assert\EqualTo(
+        propertyPath: 'confirmPassword',
+        message: 'Les deux mots de passe ne sont pas identiques'
+    )]
     public ?string $confirmPassword;
 
     private $oldPassword;
-    #[Assert\NotBlank(message: 'Vous devez entrez un mot de passe')]
+    /*     #[Assert\NotBlank(message: 'Vous devez entrez un mot de passe', groups: ['register'])] */
     #[Assert\Length(
         min: 8,
         minMessage: 'Votre mot de passe doit faire un minimum de 8 caractères'
     )]
+    #[Assert\Regex(pattern: '#(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}#', match: true, message: 'Le mot de passe doit contenir au moin 1 chiffre, 1 lettre minuscule, 1 lettre majuscule et doit faire au moins 8 caractères')]
     private $newPassword;
 
-    /* Confirmation du password */
-    #[Assert\NotBlank(message: "Vous devez entrer une confirmation de mot de passe")]
+    /* Confirmation du nouveau password */
+    /*     #[Assert\NotBlank(message: "Vous devez entrer une confirmation de mot de passe")] */
     #[Assert\EqualTo(
         propertyPath: 'newPassword',
         message: 'Les deux mots de passe ne sont pas identiques'
@@ -78,11 +84,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, ResetPassword>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ResetPassword::class)]
+    private Collection $resetPasswords;
+
+    #[ORM\Column]
+    private ?bool $active = false;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->resetPasswords = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -331,6 +347,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $comment->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResetPassword>
+     */
+    public function getResetPasswords(): Collection
+    {
+        return $this->resetPasswords;
+    }
+
+    public function addResetPassword(ResetPassword $resetPassword): static
+    {
+        if (!$this->resetPasswords->contains($resetPassword)) {
+            $this->resetPasswords->add($resetPassword);
+            $resetPassword->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResetPassword(ResetPassword $resetPassword): static
+    {
+        if ($this->resetPasswords->removeElement($resetPassword)) {
+            // set the owning side to null (unless already changed)
+            if ($resetPassword->getUser() === $this) {
+                $resetPassword->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }

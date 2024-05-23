@@ -39,9 +39,17 @@ class RegisterController extends AbstractController
             $this->manager->persist($user);
             $this->manager->flush();
 
+            $contentEmail = "Bonjour" . $user->getEmail() . "<br
+            Merci pour votre inscription, le compte a été créer et doit être activé via le lien d'activation ci-dessous <br>
+            http://lien";
+
+            mail($user->getEmail(), 'Activation de compte', $contentEmail);
+
+
+
             $this->addFlash(
                 'success',
-                'Le compte ' . $user->getEmail() . ' a bien été créé'
+                'Le compte ' . $user->getEmail() . ' a bien été créé et doit être activé, un mail vous à été envoyé'
             );
 
             return $this->redirectToRoute('connexion'); // Redirection vers la page de connexion
@@ -50,5 +58,36 @@ class RegisterController extends AbstractController
         return $this->render('register/index.html.twig', [
             "form" => $form->createView(),
         ]);
+    }
+
+    #[Route(path: '/inscription/{email}/token', name: 'register_active')]
+    public function register_active(User $user, $token)
+    {
+        $token_verif = sha1($user->getEmail() . $user->getPassword());
+        if (!$user->isActive()) {
+            if ($token == $token_verif) {
+                $user->setActive(true);
+                $this->manager->persist($user);
+                $this->manager->flush();
+                $this->addFlash(
+                    'success',
+                    'Votre compte est activé avec success'
+                );
+                return $this->redirectToRoute('connexion');
+            } else {
+                $this->addFlash(
+                    'danger',
+                    'Lien d\'activation incorrect'
+                );
+                return $this->redirectToRoute('home');
+            }
+        } else {
+            $this->addFlash(
+                'success',
+                'Compte déjà activé'
+            );
+            return $this->redirectToRoute('home');
+        }
+        return $this->redirectToRoute('connexion');
     }
 }

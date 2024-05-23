@@ -23,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCrudController extends AbstractCrudController
@@ -70,6 +71,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('firstName')->setLabel('Prénom'),
             TextField::new('lastName')->setLabel('Nom'),
             EmailField::new('email'),
+            BooleanField::new('active'),
             TextField::new('password')->onlyWhenCreating()->setFormType(PasswordType::class)->setLabel('Mot de passe')->onlyWhenCreating()->setRequired(true),
             TextField::new('confirmPassword')->onlyWhenCreating()->setRequired(true)->setFormType(PasswordType::class),
             ChoiceField::new('roles')->setChoices(['Admin' => 'ROLE_ADMIN', 'Utilisateur' => 'ROLE_USER'])->allowMultipleChoices()
@@ -119,7 +121,7 @@ class UserCrudController extends AbstractCrudController
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
-        $response = $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto,$entityDto,$fields, $filters);
+        $response = $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
 
         return $response;
     }

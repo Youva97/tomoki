@@ -14,9 +14,10 @@ class HomeController extends AbstractController
 {
 
     #[Route('/', name: 'home')]
-    public function index(RequestStack $requestStack, OrderRepository $repo, MailerInterface $mailer): Response
+    public function index(RequestStack $requestStack, OrderRepository $repo): Response
     {
-        $email = (new Email())
+        /*      MailerInterface $mailer
+   $email = (new Email())
             ->from('mineas.gael@outlook.com')
             ->to('mineas.gael@outlook.com')
             //->cc('cc@example.com')
@@ -28,6 +29,7 @@ class HomeController extends AbstractController
             ->html('<p>See Twig integration for better HTML integration!</p>');
 
         $mailer->send($email);
+        dd($mailer); */
 
         // dd($repo->findOrder('gaelmineas971@gmail.com'));
         // dump($requestStack->getSession()->get('cart')); 
