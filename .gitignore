@@ -1,6 +1,7 @@
 
 ###> symfony/framework-bundle ###
-
+/migrations/*
+!/migrations/.gitignore
 /.env
 /.env.local
 /.env.local.php
