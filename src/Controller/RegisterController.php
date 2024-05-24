@@ -41,16 +41,11 @@ class RegisterController extends AbstractController
 
             $token = sha1($user->getEmail() . $user->getPassword());
 
-            $content_mail = 'Bonjour' . $user->getFirstName() . '' . $user->getLastName() . ',<br><br>
-            Merci de vous etre inscrit sur Tomoki. Votre compte a été céé et doit etre activé avant que vous puissiez l\'utiliser.<br>
-            Pour l\'activer,cliquez sur le lien ci dessous ou copiez et collez le dans votre navigateur:<br><a href="https://' . $_SERVER['HTTP_HOST'] . '/inscription/' . $user->getEmail() . '/' . $token . '" style="color: #5cff00">https://'
-                . $_SERVER['HTTP_HOST'] . '/inscription/' . $user->getEmail() . '/' . $token . '</a><br><br>
-            Apres activation vous pourrez vous connecter a < href="https://www.myboutique.com/" style="color:
-            #5cff00">https://www.myboutique.com/</a> en utilisant l\'identifiant et le mot de passe suivants: <br>
-            Identifiant:' . $user->getEmail() . '<br>
-            Mot de passe:' . $user->getPassword();
-
-            $mail->send($user->getEmail() . $user->getFirstName() . '' . $user->getLastName() . 'Details du compte utilisateur de' . $user->getFirstName() . '' . $user->getLastName() . 'sur Tomoki' . $content_mail);
+            // Envoi d'un mail
+            $contentEmail = 'Bonjour' . $user->getEmail() . '<br>
+        Merci de votre inscription, le compte a été créé et doit être activé via le lien ci-dessous<br>
+        http://' . $_SERVER['HTTP_HOST'] . '/inscription/' . $user->getId() . '/' . $token;
+            mail($user->getEmail(), 'Activation de compte', $contentEmail);
 
 
 

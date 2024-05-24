@@ -20,7 +20,8 @@ class UsersFixtures extends Fixture {
         $admin->setFirstName('Gael')
         ->setLastName('Minéas') 
         ->setEmail('gael@test.com') 
-        ->setRoles(["ROLE_ADMIN"]);
+        ->setRoles(["ROLE_ADMIN"])
+        ->setActive(1);
         $admin->setPassword($this->passwordHasher->hashPassword( $admin, 'test' )); 
         $manager->persist($admin); $faker = Factory::create('fr_FR'); 
         //dump($faker->name); 
@@ -30,6 +31,7 @@ class UsersFixtures extends Fixture {
             $user->setFirstName($faker->firstName());
             $user->setLastName($faker->lastName());
             $user->setEmail($faker->email());
+            $user->setActive(0);
             $user->setPassword($this->passwordHasher->hashPassword( $user, 'test' ));
             $manager->persist($user);
         } 
